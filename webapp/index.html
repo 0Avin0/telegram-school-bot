@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Bot Mini App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏫 School Bot</h1>
+            <p>Інтерактивний помічник для навчання</p>
+        </header>
+
+        <main>
+            <div class="user-info">
+                <img id="user-photo" src="" alt="User Photo">
+                <div>
+                    <h2 id="user-name">Користувач</h2>
+                    <p id="user-id">ID: </p>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature-card" onclick="showFeature('schedule')">
+                    <h3>📅 Розклад занять</h3>
+                    <p>Перегляд розкладу уроків</p>
+                </div>
+                
+                <div class="feature-card" onclick="showFeature('homework')">
+                    <h3>📚 Домашні завдання</h3>
+                    <p>Перегляд та додавання домашніх завдань</p>
+                </div>
+                
+                <div class="feature-card" onclick="showFeature('grades')">
+                    <h3>📊 Оцінки</h3>
+                    <p>Перегляд ваших оцінок</p>
+                </div>
+                
+                <div class="feature-card" onclick="showFeature('messages')">
+                    <h3>✉️ Повідомлення</h3>
+                    <p>Зв'язок з вчителями</p>
+                </div>
+
+                <div class="feature-card" onclick="showFeature('random')">
+                    <h3>🎲 Випадковий учень</h3>
+                    <p>Для вчителів - вибір випадкового учня</p>
+                </div>
+
+                <div class="feature-card" onclick="showFeature('books')">
+                    <h3>📖 Онлайн підручники</h3>
+                    <p>Електронні підручники 8 класу</p>
+                </div>
+
+                <div class="feature-card" onclick="showFeature('bells')">
+                    <h3>🔔 Розклад дзвінків</h3>
+                    <p>Розклад уроків та перерв</p>
+                </div>
+            </div>
+
+            <div id="feature-content" class="feature-content hidden">
+                <!-- Контент буде динамічно завантажуватись тут -->
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 School Bot | Усі права захищені</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
