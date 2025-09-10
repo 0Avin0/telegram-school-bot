@@ -7,9 +7,10 @@ tg.enableClosingConfirmation();
 const userNameElement = document.getElementById('user-name');
 const userIdElement = document.getElementById('user-id');
 const userPhotoElement = document.getElementById('user-photo');
+const userPhotoMainElement = document.getElementById('user-photo-main');
 const featureContentElement = document.getElementById('feature-content');
 
-// Дані розкладу (синхронізовані з config.py)
+// Дані синхронізовані з config.py
 const rozklad = {
     "5": {
         "Понеділок": ["Українська мова","Математика","Англійська мова","Мистецтво","Українська література","Пізнаємо природу"],
@@ -41,7 +42,6 @@ const rozklad = {
     }
 };
 
-// Посилання на підручники 8 класу (синхронізовані з config.py)
 const ebooks_8 = {
     "Інформатика": "https://pidruchnyk.com.ua/3011-informatyka-ryvkind-8-klas-2025.html",
     "Геометрія": "https://pidruchnyk.com.ua/2915-geometriia-burda-8-klas-2025.html",
@@ -65,62 +65,52 @@ const ebooks_8 = {
     "Всесвітня історія": "https://pidruchnyk.com.ua/2977-vsesvitnia-istoriia-pometun-8-klas-2025.html"
 };
 
-// Розклад дзвінків та перерв (синхронізований з config.py)
 const ROZKLAD_BELLS = [
-    ("1 урок", "8:30-9:10"),
-    ("перерва", "9:10-9:20 (10 хв)"),
-    ("2 урок", "9:20-10:00"), 
-    ("перерва", "10:00-10:20 (20 хв)"),
-    ("3 урок", "10:20-11:00"),
-    ("перерва", "11:00-11:15 (15 хв)"),
-    ("4 урок", "11:15-11:55"),
-    ("перерва", "11:55-12:10 (15 хв)"),
-    ("5 урок", "12:10-12:50"),
-    ("перерва", "12:50-13:00 (10 хв)"),
-    ("6 урок", "13:00-13:40"),
-    ("перерва", "13:40-13:50 (10 хв)"),
-    ("7 урок", "13:50-14:30"),
-    ("перерва", "14:30-14:40 (10 хв)"),
-    ("8 урок", "14:40-15:20")
+    ["1 урок", "8:30-9:10"],
+    ["перерва", "9:10-9:20 (10 хв)"],
+    ["2 урок", "9:20-10:00"], 
+    ["перерва", "10:00-10:20 (20 хв)"],
+    ["3 урок", "10:20-11:00"],
+    ["перерва", "11:00-11:15 (15 хв)"],
+    ["4 урок", "11:15-11:55"],
+    ["перерва", "11:55-12:10 (15 хв)"],
+    ["5 урок", "12:10-12:50"],
+    ["перерва", "12:50-13:00 (10 хв)"],
+    ["6 урок", "13:00-13:40"],
+    ["перерва", "13:40-13:50 (10 хв)"],
+    ["7 урок", "13:50-14:30"],
+    ["перерва", "14:30-14:40 (10 хв)"],
+    ["8 урок", "14:40-15:20"]
 ];
 
 // Ініціалізація користувача
 function initUser() {
     const user = tg.initDataUnsafe.user;
     if (user) {
-        userNameElement.textContent = `${user.first_name} ${user.last_name || ''}`;
+        const userName = `${user.first_name} ${user.last_name || ''}`.trim();
+        userNameElement.textContent = userName;
         userIdElement.textContent = `ID: ${user.id}`;
         
         if (user.photo_url) {
             userPhotoElement.src = user.photo_url;
-        } else {
-            userPhotoElement.src = 'assets/default-avatar.png';
+            userPhotoMainElement.src = user.photo_url;
         }
-    } else {
-        userNameElement.textContent = 'Користувач Telegram';
-        userPhotoElement.src = 'assets/default-avatar.png';
     }
 }
 
-// Функції для відображення контенту функцій
+// Функції для відображення контенту
 function showFeature(feature) {
-    featureContentElement.classList.remove('hidden');
+    const welcomeMessage = document.querySelector('.welcome-message');
+    if (welcomeMessage) {
+        welcomeMessage.classList.add('hidden');
+    }
     
     switch(feature) {
-        case 'schedule':
-            showSchedule();
-            break;
-        case 'homework':
-            showHomework();
-            break;
-        case 'grades':
-            showGrades();
-            break;
-        case 'messages':
-            showMessages();
-            break;
         case 'random':
             showRandomStudent();
+            break;
+        case 'schedule':
+            showSchedule();
             break;
         case 'books':
             showBooks();
@@ -128,151 +118,332 @@ function showFeature(feature) {
         case 'bells':
             showBells();
             break;
+        case 'info':
+            showInfo();
+            break;
+        case 'classes':
+            showClasses();
+            break;
     }
+}
+
+function showRandomStudent() {
+    featureContentElement.innerHTML = `
+        <div class="feature-header">
+            <h2>🎲 Випадковий учень</h2>
+            <p>Функція для вчителів</p>
+        </div>
+        <div class="feature-body">
+            <div class="info-card">
+                <p>Ця функція доступна у повній версії Telegram бота.</p>
+                <p>Використовуйте команду <code>/random_child</code> або кнопку "🎲 Випадковий учень" у меню бота.</p>
+            </div>
+            <div class="action-buttons">
+                <button class="btn primary" onclick="openTelegram()">Відкрити в Telegram</button>
+            </div>
+        </div>
+    `;
 }
 
 function showSchedule() {
     featureContentElement.innerHTML = `
-        <h2>📅 Розклад занять</h2>
-        <div class="class-selector">
-            <select id="class-select" onchange="updateSchedule()">
+        <div class="feature-header">
+            <h2>📅 Розклад занять</h2>
+            <p>Оберіть клас та день тижня</p>
+        </div>
+        <div class="schedule-controls">
+            <select class="class-selector" onchange="updateSchedule()">
                 <option value="5">5 клас</option>
                 <option value="6">6 клас</option>
                 <option value="7">7 клас</option>
                 <option value="8">8 клас</option>
             </select>
+            
+            <div class="day-buttons">
+                <button class="day-button" onclick="selectDay('Понеділок', this)">Понеділок</button>
+                <button class="day-button" onclick="selectDay('Вівторок', this)">Вівторок</button>
+                <button class="day-button" onclick="selectDay('Середа', this)">Середа</button>
+                <button class="day-button" onclick="selectDay('Четвер', this)">Четвер</button>
+                <button class="day-button" onclick="selectDay('П\'ятниця', this)">П'ятниця</button>
+            </div>
         </div>
-        <div class="day-selector" id="day-selector">
-            <button class="day-button" onclick="selectDay('Понеділок')">Понеділок</button>
-            <button class="day-button" onclick="selectDay('Вівторок')">Вівторок</button>
-            <button class="day-button" onclick="selectDay('Середа')">Середа</button>
-            <button class="day-button" onclick="selectDay('Четвер')">Четвер</button>
-            <button class="day-button" onclick="selectDay('П\'ятниця')">П'ятниця</button>
-        </div>
-        <div id="schedule-content"></div>
+        <div id="schedule-display"></div>
     `;
     
-    // Встановлюємо перший день як активний
-    selectDay('Понеділок');
+    // Активуємо перший день
+    selectDay('Понеділок', document.querySelector('.day-button'));
 }
 
-function updateSchedule() {
-    const classSelect = document.getElementById('class-select');
-    const selectedClass = classSelect.value;
-    const selectedDay = document.querySelector('.day-button.active')?.dataset.day || 'Понеділок';
-    
-    displayScheduleForDay(selectedClass, selectedDay);
-}
-
-function selectDay(day) {
+function selectDay(day, element) {
     // Видаляємо активний клас з усіх кнопок
-    const buttons = document.querySelectorAll('.day-button');
-    buttons.forEach(btn => {
+    document.querySelectorAll('.day-button').forEach(btn => {
         btn.classList.remove('active');
-        btn.dataset.day = btn.textContent;
     });
     
     // Додаємо активний клас до обраної кнопки
-    const selectedButton = Array.from(buttons).find(btn => btn.textContent === day);
-    if (selectedButton) {
-        selectedButton.classList.add('active');
-    }
+    element.classList.add('active');
     
     // Оновлюємо розклад
-    const classSelect = document.getElementById('class-select');
-    const selectedClass = classSelect ? classSelect.value : '5';
-    displayScheduleForDay(selectedClass, day);
+    updateSchedule();
 }
 
-function displayScheduleForDay(classNum, day) {
-    const scheduleContent = document.getElementById('schedule-content');
+function updateSchedule() {
+    const classSelect = document.querySelector('.class-selector');
+    const dayButton = document.querySelector('.day-button.active');
+    
+    if (!classSelect || !dayButton) return;
+    
+    const selectedClass = classSelect.value;
+    const selectedDay = dayButton.textContent;
+    
+    displaySchedule(selectedClass, selectedDay);
+}
+
+function displaySchedule(classNum, day) {
+    const scheduleDisplay = document.getElementById('schedule-display');
     const lessons = rozklad[classNum]?.[day] || [];
     
     if (lessons.length === 0) {
-        scheduleContent.innerHTML = `<p>На ${day} у ${classNum} класі немає уроків.</p>`;
+        scheduleDisplay.innerHTML = `
+            <div class="info-card">
+                <p>На ${day} у ${classNum} класі немає уроків.</p>
+            </div>
+        `;
         return;
     }
     
-    let html = `<h3>${day} - ${classNum} клас</h3><table class="schedule-table"><tr><th>№</th><th>Урок</th></tr>`;
+    let html = `
+        <div class="schedule-header">
+            <h3>${classNum} клас - ${day}</h3>
+        </div>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Урок</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
     
     lessons.forEach((lesson, index) => {
-        html += `<tr><td>${index + 1}</td><td>${lesson}</td></tr>`;
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${lesson}</td>
+            </tr>
+        `;
     });
     
-    html += '</table>';
-    scheduleContent.innerHTML = html;
-}
-
-function showHomework() {
-    featureContentElement.innerHTML = `
-        <h2>📚 Домашні завдання</h2>
-        <p>Функціонал домашніх завдань буде додано найближчим часом.</p>
-        <p>Тут ви зможете переглядати та додавати домашні завдання.</p>
+    html += `
+            </tbody>
+        </table>
     `;
-}
-
-function showGrades() {
-    featureContentElement.innerHTML = `
-        <h2>📊 Оцінки</h2>
-        <p>Функціонал оцінок буде додано найближчим часом.</p>
-        <p>Тут ви зможете переглядати свої оцінки з різних предметів.</p>
-    `;
-}
-
-function showMessages() {
-    featureContentElement.innerHTML = `
-        <h2>✉️ Повідомлення</h2>
-        <p>Функціонал повідомлень буде додано найближчим часом.</p>
-        <p>Тут ви зможете спілкуватися з вчителями.</p>
-    `;
-}
-
-function showRandomStudent() {
-    featureContentElement.innerHTML = `
-        <h2>🎲 Випадковий учень</h2>
-        <p>Ця функція доступна тільки для вчителів у повній версії бота.</p>
-        <p>У мобільному додатку Telegram використовуйте команду /random_child</p>
-        <p>або кнопку "🎲 Випадковий учень" в меню бота.</p>
-    `;
+    
+    scheduleDisplay.innerHTML = html;
 }
 
 function showBooks() {
-    let html = `<h2>📖 Онлайн підручники 8 класу</h2><ul class="book-list">`;
+    let html = `
+        <div class="feature-header">
+            <h2>📖 Онлайн підручники</h2>
+            <p>8 клас - електронні версії</p>
+        </div>
+        <div class="books-list">
+            <ul class="book-list">
+    `;
     
-    for (const [subject, url] of Object.entries(ebooks_8)) {
+    Object.entries(ebooks_8).forEach(([subject, url]) => {
         html += `
             <li class="book-item">
+                <span class="book-icon">📚</span>
                 <a href="${url}" target="_blank" class="book-link">${subject}</a>
+                <span class="external-icon">↗</span>
             </li>
         `;
-    }
+    });
     
-    html += '</ul>';
+    html += `
+            </ul>
+        </div>
+    `;
+    
     featureContentElement.innerHTML = html;
 }
 
 function showBells() {
-    let html = `<h2>🔔 Розклад дзвінків та перерв</h2><ul class="bells-list">`;
+    let html = `
+        <div class="feature-header">
+            <h2>🔔 Розклад дзвінків</h2>
+            <p>Час уроків та перерв</p>
+        </div>
+        <div class="bells-list">
+            <ul>
+    `;
     
     ROZKLAD_BELLS.forEach(([lesson, time]) => {
         const isBreak = lesson.includes('перерва');
         html += `
             <li class="bell-item">
-                <span>${isBreak ? '🔄' : '📚'} ${lesson}</span>
+                <div class="bell-info">
+                    <span class="bell-icon">${isBreak ? '🔄' : '📚'}</span>
+                    <span class="bell-text">${lesson}</span>
+                </div>
                 <span class="bell-time">${time}</span>
             </li>
         `;
     });
     
     html += `
-        </ul>
-        <p><strong>⏰ Загальна тривалість навчального дня:</strong> 6:50 год</p>
+            </ul>
+            <div class="info-card">
+                <p><strong>Загальна тривалість навчального дня:</strong> 6 год 50 хв</p>
+            </div>
+        </div>
     `;
     
     featureContentElement.innerHTML = html;
 }
 
+function showInfo() {
+    featureContentElement.innerHTML = `
+        <div class="feature-header">
+            <h2>📋 Інформація</h2>
+            <p>Корисні дані та контакти</p>
+        </div>
+        <div class="info-content">
+            <div class="info-card">
+                <h3>ℹ️ Про бота</h3>
+                <p>School Bot - це навчальний помічник з повним функціоналом для учнів та вчителів.</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>📞 Екстрені служби</h3>
+                <ul>
+                    <li>🚒 101 - Пожежна служба</li>
+                    <li>🚓 102 - Поліція</li>
+                    <li>🚑 103 - Швидка допомога</li>
+                    <li>⚠️ 104 - Газова служба</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🔗 Корисні посилання</h3>
+                <p>Telegram бот: <a href="https://t.me/your_bot" target="_blank">@school_helper_bot</a></p>
+                <p>Веб-версія: <a href="https://telegram-school-bot.vercel.app" target="_blank">telegram-school-bot.vercel.app</a></p>
+            </div>
+        </div>
+    `;
+}
+
+                function showClasses() {
+    featureContentElement.innerHTML = `
+        <div class="feature-header">
+            <h2>👥 Управління класами</h2>
+            <p>Функція для вчителів</p>
+        </div>
+        <div class="feature-body">
+            <div class="info-card">
+                <p>Ця функція доступна у повній версії Telegram бота.</p>
+                <p>Використовуйте команди у боті для керування класами:</p>
+                <ul>
+                    <li><code>/add_class</code> - додати клас</li>
+                    <li><code>/add_children</code> - додати учнів</li>
+                    <li><code>/list_class</code> - список класів</li>
+                    <li><code>/list_children</code> - список учнів</li>
+                    <li><code>/delete_class</code> - видалити клас</li>
+                    <li><code>/delete_child</code> - видалити учня</li>
+                </ul>
+            </div>
+            <div class="action-buttons">
+                <button class="btn primary" onclick="openTelegram()">Відкрити в Telegram</button>
+            </div>
+        </div>
+    `;
+}
+
+function openTelegram() {
+    // Спроба відкрити Telegram через deeplink
+    const telegramUrl = 'tg://resolve?domain=your_bot';
+    window.open(telegramUrl, '_blank');
+    
+    // Fallback для браузерів
+    setTimeout(() => {
+        window.location.href = 'https://t.me/your_bot';
+    }, 500);
+}
+
+// Допоміжні функції
+function showLoading() {
+    featureContentElement.innerHTML = `
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Завантаження...</p>
+        </div>
+    `;
+}
+
+function showError(message) {
+    featureContentElement.innerHTML = `
+        <div class="error-message">
+            <h3>❌ Помилка</h3>
+            <p>${message}</p>
+        </div>
+    `;
+}
+
+function showSuccess(message) {
+    featureContentElement.innerHTML = `
+        <div class="success-message">
+            <h3>✅ Успіх</h3>
+            <p>${message}</p>
+        </div>
+    `;
+}
+
+// Обробка подій Telegram WebApp
+function setupTelegramEvents() {
+    tg.onEvent('viewportChanged', (event) => {
+        console.log('Viewport changed:', event);
+    });
+    
+    tg.onEvent('themeChanged', (event) => {
+        console.log('Theme changed:', event);
+        updateTheme();
+    });
+}
+
+function updateTheme() {
+    const theme = tg.colorScheme;
+    if (theme === 'dark') {
+        document.documentElement.style.setProperty('--background-color', '#1a1a1a');
+        document.documentElement.style.setProperty('--card-color', '#2d2d2d');
+        document.documentElement.style.setProperty('--text-primary', '#ffffff');
+        document.documentElement.style.setProperty('--text-secondary', '#cccccc');
+        document.documentElement.style.setProperty('--border-color', '#444444');
+    } else {
+        document.documentElement.style.setProperty('--background-color', '#f5f8fa');
+        document.documentElement.style.setProperty('--card-color', '#ffffff');
+        document.documentElement.style.setProperty('--text-primary', '#223344');
+        document.documentElement.style.setProperty('--text-secondary', '#556677');
+        document.documentElement.style.setProperty('--border-color', '#e1e8ed');
+    }
+}
+
 // Ініціалізація при завантаженні сторінки
 document.addEventListener('DOMContentLoaded', function() {
     initUser();
+    setupTelegramEvents();
+    updateTheme();
+    
+    // Автоматично показуємо розклад при відкритті
+    setTimeout(() => showFeature('schedule'), 100);
+});
+
+// Обробка кліків по зовнішнім посиланням
+document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes('telegram-school-bot.vercel.app')) {
+        e.preventDefault();
+        window.open(e.target.href, '_blank');
+    }
 });
