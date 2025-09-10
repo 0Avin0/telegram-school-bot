@@ -5,216 +5,267 @@
     font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+:root {
+    --primary-color: #2a5885;
+    --secondary-color: #4a76a8;
+    --accent-color: #5181b8;
+    --background-color: #f5f8fa;
+    --card-color: #ffffff;
+    --text-primary: #223344;
+    --text-secondary: #556677;
+    --border-color: #e1e8ed;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --error-color: #f44336;
+}
+
 body {
-    background-color: #f5f5f5;
-    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
     line-height: 1.6;
 }
 
 .container {
     max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Хедер */
+.app-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     padding: 16px;
-    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
-header {
-    text-align: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-header h1 {
+.header-content h1 {
     font-size: 24px;
-    margin-bottom: 8px;
-    color: #2a5885;
+    color: var(--primary-color);
+    margin-bottom: 4px;
 }
 
-header p {
-    color: #656565;
+.header-content p {
+    color: var(--text-secondary);
     font-size: 14px;
+}
+
+.user-avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-color);
+}
+
+/* Основной контент */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    padding-bottom: 80px;
+}
+
+.user-card {
+    background: var(--card-color);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .user-info {
     display: flex;
     align-items: center;
-    background: white;
-    padding: 16px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 24px;
+    gap: 15px;
 }
 
-#user-photo {
-    width: 60px;
-    height: 60px;
+#user-photo-main {
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    margin-right: 16px;
-    object-fit: cover;
+    border: 4px solid var(--accent-color);
 }
 
-.user-info h2 {
+.user-details h2 {
     font-size: 18px;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
+    color: var(--text-primary);
 }
 
-.user-info p {
+.user-details p {
+    color: var(--text-secondary);
     font-size: 14px;
-    color: #656565;
 }
 
-.features {
+/* Навігаційна сітка */
+.navigation-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
-.feature-card {
-    background: white;
-    padding: 16px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.nav-card {
+    background: var(--card-color);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
 }
 
-.feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.nav-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, var(--card-color) 0%, #f8f9fa 100%);
 }
 
-.feature-card h3 {
+.nav-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.nav-text h3 {
     font-size: 16px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+
+.nav-text p {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Контент функцій */
+.feature-content {
+    background: var(--card-color);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    min-height: 300px;
+}
+
+.welcome-message h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.welcome-message > p {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--text-secondary);
+}
+
+.welcome-features {
+    display: grid;
+    gap: 15px;
+}
+
+.feature-highlight {
     display: flex;
     align-items: center;
-}
-
-.feature-card h3::before {
-    margin-right: 8px;
-    font-size: 20px;
-}
-
-.feature-card p {
-    font-size: 14px;
-    color: #656565;
-}
-
-.feature-content {
-    background: white;
-    padding: 16px;
+    gap: 15px;
+    padding: 15px;
+    background: #f8f9fa;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 24px;
+    border-left: 4px solid var(--accent-color);
 }
 
-.feature-content h2 {
-    font-size: 20px;
-    margin-bottom: 16px;
-    color: #2a5885;
+.feature-highlight span {
+    font-size: 24px;
+    width: 40px;
+    text-align: center;
 }
 
-.class-selector {
-    margin-bottom: 16px;
+.feature-highlight p {
+    color: var(--text-primary);
+    font-weight: 500;
 }
 
-.class-selector select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 16px;
+/* Стилі для розкладу */
+.schedule-controls {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
+.class-selector select,
 .day-selector {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 16px;
+    background: var(--card-color);
+}
+
+.day-buttons {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 10px;
 }
 
 .day-button {
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: none;
-    border-radius: 8px;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-color);
     cursor: pointer;
     text-align: center;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
 }
 
 .day-button:hover {
-    background-color: #e0e0e0;
+    border-color: var(--accent-color);
 }
 
 .day-button.active {
-    background-color: #2a5885;
+    background: var(--primary-color);
     color: white;
+    border-color: var(--primary-color);
 }
 
-.hidden {
-    display: none;
-}
-
-footer {
-    text-align: center;
-    padding: 16px;
-    color: #656565;
-    font-size: 12px;
-}
-
-/* Стилі для контенту функцій */
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 16px;
-}
-
-.schedule-table th, .schedule-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
+    margin-top: 20px;
 }
 
 .schedule-table th {
-    background-color: #f9f9f9;
-    font-weight: 600;
-}
-
-.homework-item, .grade-item, .message-item {
-    padding: 12px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.homework-item:last-child, .grade-item:last-child, .message-item:last-child {
-    border-bottom: none;
-}
-
-.btn {
-    display: inline-block;
-    padding: 10px 16px;
-    background-color: #2a5885;
+    background: var(--primary-color);
     color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 12px;
-    text-decoration: none;
+    padding: 15px;
+    text-align: left;
 }
 
-.btn:hover {
-    background-color: #1e3c5f;
+.schedule-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
 }
 
+.schedule-table tr:hover {
+    background: #f8f9fa;
+}
+
+/* Стилі для підручників */
 .book-list {
-    list-style-type: none;
+    list-style: none;
 }
 
 .book-item {
-    padding: 12px;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: between;
+    align-items: center;
 }
 
 .book-item:last-child {
@@ -222,24 +273,33 @@ footer {
 }
 
 .book-link {
-    color: #2a5885;
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: 500;
+    flex: 1;
 }
 
 .book-link:hover {
+    color: var(--accent-color);
     text-decoration: underline;
 }
 
+.book-icon {
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+/* Стилі для дзвінків */
 .bells-list {
-    list-style-type: none;
+    list-style: none;
 }
 
 .bell-item {
-    padding: 12px;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .bell-item:last-child {
@@ -247,21 +307,123 @@ footer {
 }
 
 .bell-time {
-    font-weight: 500;
-    color: #2a5885;
+    font-weight: 600;
+    color: var(--primary-color);
 }
 
-/* Адаптивність для мобільних пристроїв */
-@media (max-width: 480px) {
-    .features {
+/* Футер */
+.app-footer {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+.app-footer p {
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+}
+
+.app-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.app-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .navigation-grid {
         grid-template-columns: 1fr;
     }
     
-    .container {
-        padding: 12px;
-    }
-    
-    .day-selector {
+    .day-buttons {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    .header-content h1 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 15px;
+    }
+    
+    .nav-card {
+        padding: 15px;
+    }
+    
+    .day-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .schedule-table th,
+    .schedule-table td {
+        padding: 10px;
+    }
+}
+
+/* Анімації */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feature-content > * {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Спеціальні класи */
+.hidden {
+    display: none;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    background: #ffebee;
+    color: var(--error-color);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border-left: 4px solid var(--error-color);
+}
+
+.success-message {
+    background: #e8f5e8;
+    color: var(--success-color);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border-left: 4px solid var(--success-color);
 }
