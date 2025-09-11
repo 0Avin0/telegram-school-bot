@@ -2,30 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "**/*.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "assets/**/*",
+      "src": "public/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/public/$1"
     }
   ],
   "headers": [
@@ -43,15 +27,8 @@
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
         }
       ]
     }
-  ],
-  "env": {
-    "TELEGRAM_BOT_URL": "https://t.me/your_bot"
-  }
+  ]
 }
