@@ -49,6 +49,29 @@ const rozklad = {
     }
 };
 
+const ebooks_8 = {
+    "Інформатика": "https://pidruchnyk.com.ua/3011-informatyka-ryvkind-8-klas-2025.html",
+    "Геометрія": "https://pidruchnyk.com.ua/2915-geometriia-burda-8-klas-2025.html",
+    "Англійська мова": "https://pidruchnyk.com.ua/2896-angliiska-mova-mitchell-8-klas.html",
+    "Технологія (хлопці)": "https://pidruchnyk.com.ua/2953-tekhnologii-bilenko-8-klas-2025.html",
+    "Зарубіжна література": "https://pidruchnyk.com.ua/2993-zarubizhna-literatura-milianovska-8-klas-2025.html",
+    "Історія України": "https://pidruchnyk.com.ua/3016-istoriia-ukrainy-pometun-8-klas-2025.html",
+    "Українська література": "https://pidruchnyk.com.ua/2962-ukrainska-literatura-avramenko-8-klas-2025.html",
+    "Німецька мова": "https://pidruchnyk.com.ua/2941-nimecka-sotnykova-8-klas-2025-4rik.html",
+    "Технологія (дівчата)": "https://pidruchnyk.com.ua/2951-tekhnologii-khodzycka-8-klas-2025.html",
+    "Підприємство та фінансова грамотність": "https://pidruchnyk.com.ua/2948-pidpryiemnyctvo-i-finansova-gramotnist-kuzniecova-8-klas-2025.html",
+    "Хімія": "https://pidruchnyk.com.ua/2920-khimiia-midak-8-klas-2025.html",
+    "Географія": "https://pidruchnyk.com.ua/2984-geografiia-gilberg-8-klas-2025.html",
+    "Біологія": "https://pidruchnyk.com.ua/2925-biologiia-balan-8-klas-2025.html",
+    "Мистецтво": "https://pidruchnyk.com.ua/2938-mystectvo-masol-8-klas-2025.html",
+    "Фізика": "https://pidruchnyk.com.ua/2971-fizyka-bariakhtar-8-klas-2025.html",
+    "Алгебра": "https://pidruchnyk.com.ua/2909-algebra-tarasenkova-8-klas-2025.html",
+    "Здоров'я, безпека та добробут": "https://pidruchnyk.com.ua/3000-zdorovia-bezpeka-ta-dobrobut-shyian-8-klas-2025.html",
+    "Українська мова": "https://pidruchnyk.com.ua/2899-ukrainska-mova-avramenko-8-klas-2025.html",
+    "Громадська освіта": "https://pidruchnyk.com.ua/2988-gromadianska-osvita-vasylkiv-8-klas-2025.html",
+    "Всесвітня історія": "https://pidruchnyk.com.ua/2977-vsesvitnia-istoriia-pometun-8-klas-2025.html"
+};
+
 const ROZKLAD_BELLS = [
     ["1 урок", "8:30-9:10"],
     ["перерва", "9:10-9:20 (10 хв)"],
@@ -217,7 +240,6 @@ function updateSchedule() {
     const selectedDay = dayButton.dataset.day;
     
     displaySchedule(selectedClass, selectedDay);
-}
 
 function displaySchedule(classNum, day) {
     const scheduleDisplay = document.getElementById('schedule-display');
@@ -273,6 +295,7 @@ function displaySchedule(classNum, day) {
 function showBooks() {
     let html = `
         <div class="books-list">
+            <p style="margin-bottom: 15px; color: var(--text-secondary);">Електронні підручники для 8 класу:</p>
             <ul class="book-list">
     `;
     
@@ -280,7 +303,7 @@ function showBooks() {
         html += `
             <li class="book-item">
                 <span class="book-icon">📚</span>
-                <a href="${url}" target="_blank" class="book-link">${subject}</a>
+                <a href="${url}" target="_blank" class="book-link" onclick="event.stopPropagation();">${subject}</a>
                 <span class="external-icon">↗</span>
             </li>
         `;
@@ -291,7 +314,7 @@ function showBooks() {
         </div>
     `;
     
-    openModal('books-modal', '📖 Онлайн підручники 8 класу', html);
+    openModal('books-modal', '📖 Онлайн підручники', html);
 }
 
 function showBells() {
@@ -343,9 +366,9 @@ function showInfo() {
             </div>
             
             <div class="info-card">
-                <h3>🔗 Корисні посилання</h3>
-                <p>Telegram бот: <a href="https://t.me/your_bot" target="_blank">@school_helper_bot</a></p>
-                <p>Веб-версія: <a href="https://telegram-school-bot.vercel.app" target="_blank">telegram-school-bot.vercel.app</a></p>
+                <h3>🔗 Підтримка</h3>
+                <p>Telegram: <a href="https://t.me/random_childbot_support" target="_blank" onclick="event.stopPropagation();">@random_childbot_support</a></p>
+                <p>Бот: <a href="https://t.me/your_bot" target="_blank" onclick="event.stopPropagation();">@school_helper_bot</a></p>
             </div>
         </div>
     `;
@@ -377,15 +400,29 @@ function showClasses() {
 
 function openTelegram() {
     // Спроба відкрити Telegram через deeplink
-    const telegramUrl = 'tg://resolve?domain=your_bot';
+    const telegramUrl = 'tg://resolve?domain=random_childbot_support';
     window.open(telegramUrl, '_blank');
     
     // Fallback для браузерів
     setTimeout(() => {
-        window.location.href = 'https://t.me/your_bot';
+        window.location.href = 'https://t.me/random_childbot_support';
     }, 500);
     
     // Закриваємо модальне вікно
+    if (currentModal) {
+        closeModal(currentModal);
+    }
+}
+
+// Спеціальна функція для відкриття підтримки
+function openSupport() {
+    const telegramUrl = 'tg://resolve?domain=random_childbot_support';
+    window.open(telegramUrl, '_blank');
+    
+    setTimeout(() => {
+        window.location.href = 'https://t.me/random_childbot_support';
+    }, 500);
+    
     if (currentModal) {
         closeModal(currentModal);
     }
