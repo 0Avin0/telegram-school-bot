@@ -8,7 +8,9 @@ const userNameElement = document.getElementById('user-name');
 const userIdElement = document.getElementById('user-id');
 const userPhotoElement = document.getElementById('user-photo');
 const userPhotoMainElement = document.getElementById('user-photo-main');
-const featureContentElement = document.getElementById('feature-content');
+
+// Поточний активний модальний
+let currentModal = null;
 
 // Дані синхронізовані з config.py
 const rozklad = {
@@ -45,7 +47,7 @@ const rozklad = {
         "Вівторок": ["Географія","Хімія","Основи здоров'я","Зарубіжна література","Правознавство","Фізична культура","Всесвітня історія"],
         "Середа": ["Українська мова/інформатика","Фізична культура","Алгебра","Інформатика/українська мова","Фізика","Біологія","Англійська мова"],
         "Четвер": ["Фізична культура","Зарубіжна література","Геометрія","Історія України","Мистецтво","Українська література","Фізика"],
-        "П'ятниця": ["Геометрія","Англ.мова/нім.мова","Українська мова/інформатика","Хімія","Нім.мова/англ.мова","Інформатика/українська мова","Трудове навчання"]
+        "П'ятниця": ["Геометрія","Англ.мова/нім.мова","Українська мowa/інформатика","Хімія","Нім.мова/англ.мова","Інформатика/українська мова","Трудове навчання"]
     }
 };
 
@@ -89,9 +91,6 @@ const ROZKLAD_BELLS = [
     ["перерва", "14:30-14:40 (10 хв)"],
     ["8 урок", "14:40-15:20"]
 ];
-
-// Поточний активний модальний
-let currentModal = null;
 
 // Ініціалізація користувача
 function initUser() {
@@ -152,38 +151,21 @@ function closeModal(modalId) {
 }
 
 // Функції для відображення контенту
-function showFeature(feature) {
-    switch(feature) {
-        case 'random':
-            showRandomStudent();
-            break;
-        case 'schedule':
-            showSchedule();
-            break;
-        case 'books':
-            showBooks();
-            break;
-        case 'bells':
-            showBells();
-            break;
-        case 'info':
-            showInfo();
-            break;
-        case 'classes':
-            showClasses();
-            break;
-    }
-}
-
 function showRandomStudent() {
     const content = `
         <div class="feature-body">
             <div class="info-card">
-                <p>Ця функція доступна у повній версії Telegram бота.</p>
-                <p>Використовуйте команду <code>/random_child</code> або кнопку "🎲 Випадковий учень" у меню бота.</p>
+                <h3>🎲 Випадковий учень</h3>
+                <p>Ця функція призначена для вчителів. Вона дозволяє випадковим чином вибирати учня з класу для відповіді чи участі в активності.</p>
+                <p><strong>Як використовувати:</strong></p>
+                <ul>
+                    <li>Додайте клас через команду /add_class</li>
+                    <li>Додайте учнів через команду /add_children</li>
+                    <li>Використовуйте команду /random_child для вибору учня</li>
+                </ul>
             </div>
             <div class="action-buttons">
-                <button class="btn primary" onclick="openTelegram()">Відкрити в Telegram</button>
+                <button class="btn primary" onclick="openTelegram()">🔄 Відкрити в Telegram</button>
             </div>
         </div>
     `;
@@ -209,12 +191,21 @@ function showSchedule() {
                 <button class="day-button" data-day="П'ятниця" onclick="selectDay('Пятниця', this)">П'ятниця</button>
             </div>
         </div>
-        <div id="schedule-display"></div>
+        <div id="schedule-display">
+            <div class="info-card">
+                <p>Оберіть клас і день тижня для перегляду розкладу</p>
+            </div>
+        </div>
     `;
     openModal('schedule-modal', '📅 Розклад занять', content);
     
     // Відображаємо розклад для першого дня
-    setTimeout(updateSchedule, 100);
+    setTimeout(() => {
+        const classSelect = document.getElementById('class-select');
+        if (classSelect) {
+            updateSchedule();
+        }
+    }, 100);
 }
 
 function selectDay(day, element) {
@@ -240,6 +231,7 @@ function updateSchedule() {
     const selectedDay = dayButton.dataset.day;
     
     displaySchedule(selectedClass, selectedDay);
+}
 
 function displaySchedule(classNum, day) {
     const scheduleDisplay = document.getElementById('schedule-display');
@@ -255,7 +247,8 @@ function displaySchedule(classNum, day) {
     if (lessons.length === 0) {
         scheduleDisplay.innerHTML = `
             <div class="info-card">
-                <p>На ${actualDay} у ${classNum} класі немає уроків.</p>
+                <h3>📚 ${classNum} клас - ${actualDay}</h3>
+                <p>На цей день уроків не знайдено</p>
             </div>
         `;
         return;
@@ -263,7 +256,7 @@ function displaySchedule(classNum, day) {
     
     let html = `
         <div class="schedule-header">
-            <h3>${classNum} клас - ${actualDay}</h3>
+            <h3>📚 ${classNum} клас - ${actualDay}</h3>
         </div>
         <table class="schedule-table">
             <thead>
@@ -278,7 +271,7 @@ function displaySchedule(classNum, day) {
     lessons.forEach((lesson, index) => {
         html += `
             <tr>
-                <td>${index + 1}</td>
+                <td><strong>${index + 1}</strong></td>
                 <td>${lesson}</td>
             </tr>
         `;
@@ -287,6 +280,9 @@ function displaySchedule(classNum, day) {
     html += `
             </tbody>
         </table>
+        <div class="info-card" style="margin-top: 20px;">
+            <p><strong>💡 Порада:</strong> Натисніть на день тижня для перегляду іншого розкладу</p>
+        </div>
     `;
     
     scheduleDisplay.innerHTML = html;
@@ -294,23 +290,33 @@ function displaySchedule(classNum, day) {
 
 function showBooks() {
     let html = `
+        <div class="info-card">
+            <h3>📖 Онлайн підручники 8 класу</h3>
+            <p>Доступні електронні версії підручників для 8 класу. Натисніть на предмет для перегляду:</p>
+        </div>
         <div class="books-list">
-            <p style="margin-bottom: 15px; color: var(--text-secondary);">Електронні підручники для 8 класу:</p>
             <ul class="book-list">
     `;
     
+    let subjectCount = 1;
     for (const [subject, url] of Object.entries(ebooks_8)) {
         html += `
             <li class="book-item">
-                <span class="book-icon">📚</span>
-                <a href="${url}" target="_blank" class="book-link" onclick="event.stopPropagation();">${subject}</a>
+                <span class="book-icon">${subjectCount}.</span>
+                <a href="${url}" target="_blank" class="book-link" onclick="event.stopPropagation();">
+                    ${subject}
+                </a>
                 <span class="external-icon">↗</span>
             </li>
         `;
+        subjectCount++;
     }
     
     html += `
             </ul>
+        </div>
+        <div class="info-card">
+            <p><strong>ℹ️ Всі підручники відкриються у новому вікні</strong></p>
         </div>
     `;
     
@@ -319,14 +325,20 @@ function showBooks() {
 
 function showBells() {
     let html = `
+        <div class="info-card">
+            <h3>🔔 Розклад дзвінків</h3>
+            <p>Час уроків та перерв для всіх класів:</p>
+        </div>
         <div class="bells-list">
             <ul>
     `;
     
-    ROZKLAD_BELLS.forEach(([lesson, time]) => {
+    ROZKLAD_BELLS.forEach(([lesson, time], index) => {
         const isBreak = lesson.includes('перерва');
+        const isLesson = lesson.includes('урок');
+        
         html += `
-            <li class="bell-item">
+            <li class="bell-item ${isBreak ? 'break' : ''} ${isLesson ? 'lesson' : ''}">
                 <div class="bell-info">
                     <span class="bell-icon">${isBreak ? '🔄' : '📚'}</span>
                     <span class="bell-text">${lesson}</span>
@@ -339,7 +351,12 @@ function showBells() {
     html += `
             </ul>
             <div class="info-card">
+                <h3>⏰ Загальна інформація</h3>
                 <p><strong>Загальна тривалість навчального дня:</strong> 6 год 50 хв</p>
+                <p><strong>Початок:</strong> 8:30</p>
+                <p><strong>Закінчення:</strong> 15:20</p>
+                <p><strong>Усього уроків:</strong> 8</p>
+                <p><strong>Перерви:</strong> 7</p>
             </div>
         </div>
     `;
@@ -351,24 +368,38 @@ function showInfo() {
     const content = `
         <div class="info-content">
             <div class="info-card">
-                <h3>ℹ️ Про бота</h3>
-                <p>School Bot - це навчальний помічник з повним функціоналом для учнів та вчителів.</p>
-            </div>
-            
-            <div class="info-card">
-                <h3>📞 Екстрені служби</h3>
+                <h3>ℹ️ Про School Bot</h3>
+                <p><strong>School Bot</strong> - це сучасний навчальний помічник, створений для учнів та вчителів. Ми пропонуємо:</p>
                 <ul>
-                    <li>🚒 101 - Пожежна служба</li>
-                    <li>🚓 102 - Поліція</li>
-                    <li>🚑 103 - Швидка допомога</li>
-                    <li>⚠️ 104 - Газова служба</li>
+                    <li>📅 Повний розклад занять для 5-9 класів</li>
+                    <li>📖 Онлайн підручники 8 класу</li>
+                    <li>🎲 Інструменти для вчителів</li>
+                    <li>🔔 Зручний розклад дзвінків</li>
                 </ul>
             </div>
             
             <div class="info-card">
-                <h3>🔗 Підтримка</h3>
-                <p>Telegram: <a href="https://t.me/random_childbot_support" target="_blank" onclick="event.stopPropagation();">@random_childbot_support</a></p>
-                <p>Бот: <a href="https://t.me/your_bot" target="_blank" onclick="event.stopPropagation();">@school_helper_bot</a></p>
+                <h3>📞 Екстрені служби</h3>
+                <p>У разі потреби звертайтеся:</p>
+                <ul>
+                    <li>🚒 <strong>101</strong> - Пожежна служба</li>
+                    <li>🚓 <strong>102</strong> - Поліція</li>
+                    <li>🚑 <strong>103</strong> - Швидка допомога</li>
+                    <li>⚠️ <strong>104</strong> - Газова служба</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🔗 Зв'язок та підтримка</h3>
+                <p>Якщо виникли питання або пропозиції:</p>
+                <div class="action-buttons" style="margin-top: 15px;">
+                    <button class="btn primary" onclick="openSupport()">
+                        💬 Зв'язатися з підтримкою
+                    </button>
+                </div>
+                <p style="margin-top: 15px; font-size: 14px; color: var(--text-secondary);">
+                    Telegram: <strong>@random_childbot_support</strong>
+                </p>
             </div>
         </div>
     `;
@@ -379,19 +410,27 @@ function showClasses() {
     const content = `
         <div class="feature-body">
             <div class="info-card">
-                <p>Ця функція доступна у повній версії Telegram бота.</p>
-                <p>Використовуйте команди у боті для керування класами:</p>
+                <h3>👥 Управління класами</h3>
+                <p>Ця функція доступна у повній версії Telegram бота для вчителів.</p>
+                
+                <h4>📋 Доступні команди:</h4>
                 <ul>
-                    <li><code>/add_class</code> - додати клас</li>
-                    <li><code>/add_children</code> - додати учнів</li>
-                    <li><code>/list_class</code> - список класів</li>
-                    <li><code>/list_children</code> - список учнів</li>
+                    <li><code>/add_class</code> - додати новий клас</li>
+                    <li><code>/add_children</code> - додати учнів до класу</li>
+                    <li><code>/list_class</code> - переглянути список класів</li>
+                    <li><code>/list_children</code> - переглянути список учнів</li>
                     <li><code>/delete_class</code> - видалити клас</li>
                     <li><code>/delete_child</code> - видалити учня</li>
                 </ul>
+                
+                <h4>🎯 Як це працює?</h4>
+                <p>Створюйте класи, додавайте учнів та використовуйте функцію "Випадковий учень" для інтерактивних занять.</p>
             </div>
+            
             <div class="action-buttons">
-                <button class="btn primary" onclick="openTelegram()">Відкрити в Telegram</button>
+                <button class="btn primary" onclick="openTelegram()">
+                    🚀 Відкрити повну версію в Telegram
+                </button>
             </div>
         </div>
     `;
@@ -414,8 +453,8 @@ function openTelegram() {
     }
 }
 
-// Спеціальна функція для відкриття підтримки
 function openSupport() {
+    // Відкриваємо підтримку
     const telegramUrl = 'tg://resolve?domain=random_childbot_support';
     window.open(telegramUrl, '_blank');
     
@@ -462,6 +501,17 @@ document.addEventListener('DOMContentLoaded', function() {
     initUser();
     setupTelegramEvents();
     updateTheme();
+    
+    // Додаємо обробники кліків для всіх навігаційних карток
+    document.querySelectorAll('.nav-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function() {
+            const feature = this.getAttribute('data-feature');
+            if (feature) {
+                showFeature(feature);
+            }
+        });
+    });
 });
 
 // Обробка кліків по зовнішнім посиланням
@@ -482,4 +532,23 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && currentModal) {
         closeModal(currentModal);
     }
+});
+
+// Додаємо атрибути data-feature для кнопок
+document.addEventListener('DOMContentLoaded', function() {
+    const features = {
+        'random': 'random',
+        'schedule': 'schedule', 
+        'books': 'books',
+        'bells': 'bells',
+        'info': 'info',
+        'classes': 'classes'
+    };
+    
+    Object.entries(features).forEach(([key, value]) => {
+        const cards = document.querySelectorAll('.nav-card');
+        if (cards[key]) {
+            cards[key].setAttribute('data-feature', value);
+        }
+    });
 });
