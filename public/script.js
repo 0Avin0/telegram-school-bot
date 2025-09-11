@@ -5,8 +5,6 @@ tg.enableClosingConfirmation();
 
 // Елементи DOM
 const userNameElement = document.getElementById('user-name');
-const userIdElement = document.getElementById('user-id');
-const userPhotoElement = document.getElementById('user-photo');
 const userPhotoMainElement = document.getElementById('user-photo-main');
 
 // Поточний активний модальний
@@ -36,422 +34,429 @@ const rozklad = {
         "П'ятниця": ["Алгебра","Українська мова","Фізика","Всесвітня історія","Технології","Біологія","Фізична культура"]
     },
     "8": {
-        "Понеділок": ["Історія України","Підприємство і Фінансова грамотність","Українська мова","Алгебра","Мистецтво","Українська література","Фізика"],
-        "Вівторок": ["Фізична культура","Географія","Зарубіжна література","Німецька мова","Геометрія","Інформатика / англ. мова","Англ. мова / інформатика"],
-        "Середа": ["Хімія","Всесвітня історія","Українська мова","Біологія","Алгебра","Фізика","Фізична культура"],
-        "Четвер": ["Геометрія","Англійська мова","Німецька мова","Українська література","Географія","Алгебра","Біологія","Фізична культура"],
-        "П'ятниця": ["Українська мова","Історія України","Хімія","Інформатика / англ. мова","Англ.мова/інформатика","Технології","Здоров'я, безпека"]
+        "Понеділок": ["Історія України","Підприємство і Фінансова грамотність","Українська мова","Англійська мова","Алгебра","Геометрія","Фізична культура"],
+        "Вівторок": ["Хімія","Англійська мова","Українська література","Фізика","Біологія","Німецька мова","Географія"],
+        "Середа": ["Всесвітня історія","Українська мова","Алгебра","Геометрія","Підприємство і Фінансова грамотність","Фізична культура","Здоров'я, безпека"],
+        "Четвер": ["Фізика","Українська література","Англійська мова","Біологія","Хімія","Німецька мова","Зарубіжна література"],
+        "П'ятниця": ["Географія","Інформатика/Англ.мова","Англ. мова / інформатика","Алгебра","Українська мова","Фізика","Фізична культура"]
     },
     "9": {
-        "Понеділок": ["Біологія","Алгебра","Історія України","Українська література","Фізика","Англ.мова/нім.мова","Нім.мова/англ.мова"],
-        "Вівторок": ["Географія","Хімія","Основи здоров'я","Зарубіжна література","Правознавство","Фізична культура","Всесвітня історія"],
-        "Середа": ["Українська мова/інформатика","Фізична культура","Алгебра","Інформатика/українська мова","Фізика","Біологія","Англійська мова"],
-        "Четвер": ["Фізична культура","Зарубіжна література","Геометрія","Історія України","Мистецтво","Українська література","Фізика"],
-        "П'ятниця": ["Геометрія","Англ.мова/нім.мова","Українська мова/інформатика","Хімія","Нім.мова/англ.мова","Інформатика/українська мова","Трудове навчання"]
+        "Понеділок": ["Англійська мова","Українська мова","Алгебра","Геометрія","Фізика","Хімія","Фізична культура"],
+        "Вівторок": ["Українська література","Географія","Історія України","Німецька мова","Біологія","Всесвітня історія","Право"],
+        "Середа": ["Алгебра","Геометрія","Фізика","Англійська мова","Українська мова","Хімія","Здоров'я, безпека"],
+        "Четвер": ["Біологія","Німецька мова","Українська література","Фізична культура","Право","Інформатика/Англ.мова","Англ. мова / інформатика"],
+        "П'ятниця": ["Географія","Всесвітня історія","Алгебра","Українська мова","Фізика","Хімія","Зарубіжна література"]
+    },
+    "10": {
+        "Понеділок": ["Англійська мова","Українська мова","Алгебра","Геометрія","Фізика","Хімія","Фізична культура"],
+        "Вівторок": ["Українська література","Географія","Історія України","Німецька мова","Біологія","Всесвітня історія","Право"],
+        "Середа": ["Алгебра","Геометрія","Фізика","Англійська мова","Українська мова","Хімія","Здоров'я, безпека"],
+        "Четвер": ["Біологія","Німецька мова","Українська література","Фізична культура","Право","Інформатика/Англ.мова","Англ. мова / інформатика"],
+        "П'ятниця": ["Географія","Всесвітня історія","Алгебра","Українська мова","Фізика","Хімія","Зарубіжна література"]
+    },
+    "11": {
+        "Понеділок": ["Англійська мова","Українська мова","Алгебра","Геометрія","Фізика","Хімія","Фізична культура"],
+        "Вівторок": ["Українська література","Географія","Історія України","Німецька мова","Біологія","Всесвітня історія","Право"],
+        "Середа": ["Алгебра","Геометрія","Фізика","Англійська мова","Українська мова","Хімія","Здоров'я, безпека"],
+        "Четвер": ["Біологія","Німецька мова","Українська література","Фізична культура","Право","Інформатика/Англ.мова","Англ. мова / інформатика"],
+        "П'ятниця": ["Географія","Всесвітня історія","Алгебра","Українська мова","Фізика","Хімія","Зарубіжна література"]
     }
 };
 
-const ebooks_8 = {
-    "Інформатика": "https://pidruchnyk.com.ua/3011-informatyka-ryvkind-8-klas-2025.html",
-    "Геометрія": "https://pidruchnyk.com.ua/2915-geometriia-burda-8-klas-2025.html",
-    "Англійська мова": "https://pidruchnyk.com.ua/2896-angliiska-mova-mitchell-8-klas.html",
-    "Технологія (хлопці)": "https://pidruchnyk.com.ua/2953-tekhnologii-bilenko-8-klas-2025.html",
-    "Зарубіжна література": "https://pidruchnyk.com.ua/2993-zarubizhna-literatura-milianovska-8-klas-2025.html",
-    "Історія України": "https://pidruchnyk.com.ua/3016-istoriia-ukrainy-pometun-8-klas-2025.html",
-    "Українська література": "https://pidruchnyk.com.ua/2962-ukrainska-literatura-avramenko-8-klas-2025.html",
-    "Німецька мова": "https://pidruchnyk.com.ua/2941-nimecka-sotnykova-8-klas-2025-4rik.html",
-    "Технологія (дівчата)": "https://pidruchnyk.com.ua/2951-tekhnologii-khodzycka-8-klas-2025.html",
-    "Підприємство та фінансова грамотність": "https://pidruchnyk.com.ua/2948-pidpryiemnyctvo-i-finansova-gramotnist-kuzniecova-8-klas-2025.html",
-    "Хімія": "https://pidruchnyk.com.ua/2920-khimiia-midak-8-klas-2025.html",
-    "Географія": "https://pidruchnyk.com.ua/2984-geografiia-gilberg-8-klas-2025.html",
-    "Біологія": "https://pidruchnyk.com.ua/2925-biologiia-balan-8-klas-2025.html",
-    "Мистецтво": "https://pidruchnyk.com.ua/2938-mystectvo-masol-8-klas-2025.html",
-    "Фізика": "https://pidruchnyk.com.ua/2971-fizyka-bariakhtar-8-klas-2025.html",
-    "Алгебра": "https://pidruchnyk.com.ua/2909-algebra-tarasenkova-8-klas-2025.html",
-    "Здоров'я, безпека та добробут": "https://pidruchnyk.com.ua/3000-zdorovia-bezpeka-ta-dobrobut-shyian-8-klas-2025.html",
-    "Українська мова": "https://pidruchnyk.com.ua/2899-ukrainska-mova-avramenko-8-klas-2025.html",
-    "Громадська освіта": "https://pidruchnyk.com.ua/2988-gromadianska-osvita-vasylkiv-8-klas-2025.html",
-    "Всесвітня історія": "https://pidruchnyk.com.ua/2977-vsesvitnia-istoriia-pometun-8-klas-2025.html"
+const books = {
+    "5": {
+        "Українська мова": "https://example.com/book5-ukr",
+        "Математика": "https://example.com/book5-math",
+        "Англійська мова": "https://example.com/book5-english"
+    },
+    "6": {
+        "Українська мова": "https://example.com/book6-ukr",
+        "Математика": "https://example.com/book6-math",
+        "Англійська мова": "https://example.com/book6-english"
+    },
+    "7": {
+        "Алгебра": "https://example.com/book7-algebra",
+        "Геометрія": "https://example.com/book7-geometry",
+        "Фізика": "https://example.com/book7-physics"
+    }
 };
 
-const ROZKLAD_BELLS = [
-    ["1 урок", "8:30-9:10"],
-    ["перерва", "9:10-9:20 (10 хв)"],
-    ["2 урок", "9:20-10:00"], 
-    ["перерва", "10:00-10:20 (20 хв)"],
-    ["3 урок", "10:20-11:00"],
-    ["перерва", "11:00-11:15 (15 хв)"],
-    ["4 урок", "11:15-11:55"],
-    ["перерва", "11:55-12:10 (15 хв)"],
-    ["5 урок", "12:10-12:50"],
-    ["перерва", "12:50-13:00 (10 хв)"],
-    ["6 урок", "13:00-13:40"],
-    ["перерва", "13:40-13:50 (10 хв)"],
-    ["7 урок", "13:50-14:30"],
-    ["перерва", "14:30-14:40 (10 хв)"],
-    ["8 урок", "14:40-15:20"]
+const bells = [
+    {"lesson": 1, "start": "8:30", "end": "9:15"},
+    {"lesson": 2, "start": "9:25", "end": "10:10"},
+    {"lesson": 3, "start": "10:20", "end": "11:05"},
+    {"lesson": 4, "start": "11:15", "end": "12:00"},
+    {"lesson": 5, "start": "12:10", "end": "12:55"},
+    {"lesson": 6, "start": "13:05", "end": "13:50"},
+    {"lesson": 7, "start": "14:00", "end": "14:45"}
 ];
 
-// Ініціалізація користувача
-function initUser() {
+const classes = ["5", "6", "7", "8", "9", "10", "11"];
+
+// Ініціалізація додатку
+function initApp() {
+    // Отримуємо дані користувача з Telegram
     const user = tg.initDataUnsafe.user;
+    
     if (user) {
-        const userName = `${user.first_name} ${user.last_name || ''}`.trim();
-        userNameElement.textContent = userName;
-        userIdElement.textContent = `ID: ${user.id}`;
-        
+        userNameElement.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Учень';
         if (user.photo_url) {
-            userPhotoElement.src = user.photo_url;
             userPhotoMainElement.src = user.photo_url;
         }
     }
-}
-
-// Функції для модальних вікон
-function openModal(modalId, title, content) {
-    if (currentModal) {
-        closeModal(currentModal);
-    }
     
-    const modalHtml = `
-        <div class="modal-overlay active" id="${modalId}-overlay">
-            <div class="modal">
-                <div class="modal-header">
-                    <h2>${title}</h2>
-                    <button class="close-button" onclick="closeModal('${modalId}')">×</button>
-                </div>
-                <div class="modal-content">
-                    ${content}
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-    currentModal = modalId;
-    
-    document.getElementById(`${modalId}-overlay`).addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal(modalId);
-        }
+    // Додаємо обробники подій для карток
+    document.querySelectorAll('.nav-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const feature = card.getAttribute('data-feature');
+            openFeature(feature);
+        });
     });
 }
 
-function closeModal(modalId) {
-    const overlay = document.getElementById(`${modalId}-overlay`);
-    if (overlay) {
-        overlay.classList.remove('active');
-        setTimeout(() => overlay.remove(), 300);
-    }
-    currentModal = null;
-}
-
-// Функції для відображення контенту
-function showFeature(feature) {
+// Відкриття функціоналу за карткою
+function openFeature(feature) {
     switch(feature) {
-        case 'random': showRandomStudent(); break;
-        case 'schedule': showSchedule(); break;
-        case 'books': showBooks(); break;
-        case 'bells': showBells(); break;
-        case 'info': showInfo(); break;
-        case 'classes': showClasses(); break;
+        case 'schedule':
+            openScheduleModal();
+            break;
+        case 'books':
+            openBooksModal();
+            break;
+        case 'bells':
+            openBellsModal();
+            break;
+        case 'random':
+            openRandomStudentModal();
+            break;
+        case 'classes':
+            openClassesModal();
+            break;
+        case 'info':
+            openInfoModal();
+            break;
     }
 }
 
-function showRandomStudent() {
-    const content = `
-        <div class="info-card">
-            <h3>🎲 Випадковий учень</h3>
-            <p>Функція для вчителів - випадковий вибір учня з класу.</p>
-            <p><strong>Використовуйте в Telegram боті:</strong></p>
-            <ul>
-                <li>Команду <code>/random_child</code></li>
-                <li>Кнопку "🎲 Випадковий учень"</li>
-            </ul>
+// Модальне вікно розкладу
+function openScheduleModal() {
+    const modalContent = `
+        <div class="modal-header">
+            <h2>📅 Розклад занять</h2>
+            <button class="close-button">&times;</button>
         </div>
-        <div class="action-buttons">
-            <button class="btn primary" onclick="openTelegram()">📱 Відкрити в Telegram</button>
+        <div class="modal-content">
+            <div class="schedule-controls">
+                <select class="class-selector" id="schedule-class">
+                    ${classes.map(cls => `<option value="${cls}">${cls} клас</option>`).join('')}
+                </select>
+                <div class="day-buttons">
+                    <button class="day-button active" data-day="Понеділок">Понеділок</button>
+                    <button class="day-button" data-day="Вівторок">Вівторок</button>
+                    <button class="day-button" data-day="Середа">Середа</button>
+                    <button class="day-button" data-day="Четвер">Четвер</button>
+                    <button class="day-button" data-day="П'ятниця">П'ятниця</button>
+                </div>
+            </div>
+            <div class="schedule-display" id="schedule-display">
+                ${renderScheduleTable('5', 'Понеділок')}
+            </div>
         </div>
     `;
-    openModal('random-modal', '🎲 Випадковий учень', content);
-}
-
-function showSchedule() {
-    const content = `
-        <div class="schedule-controls">
-            <select class="class-selector" id="class-select" onchange="updateSchedule()">
-                <option value="5">5 клас</option>
-                <option value="6">6 клас</option>
-                <option value="7">7 клас</option>
-                <option value="8">8 клас</option>
-                <option value="9">9 клас</option>
-            </select>
+    
+    showModal(modalContent, 'schedule-modal');
+    
+    // Додаємо обробники подій
+    document.getElementById('schedule-class').addEventListener('change', function() {
+        const selectedClass = this.value;
+        const activeDay = document.querySelector('.day-button.active').getAttribute('data-day');
+        document.getElementById('schedule-display').innerHTML = renderScheduleTable(selectedClass, activeDay);
+    });
+    
+    document.querySelectorAll('.day-button').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.day-button').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
             
-            <div class="day-buttons" id="day-buttons">
-                <button class="day-button active" data-day="Понеділок" onclick="selectDay('Понеділок', this)">Понеділок</button>
-                <button class="day-button" data-day="Вівторок" onclick="selectDay('Вівторок', this)">Вівторок</button>
-                <button class="day-button" data-day="Середа" onclick="selectDay('Середа', this)">Середа</button>
-                <button class="day-button" data-day="Четвер" onclick="selectDay('Четвер', this)">Четвер</button>
-                <button class="day-button" data-day="П'ятниця" onclick="selectDay('Пятниця', this)">П'ятниця</button>
-            </div>
-        </div>
-        <div id="schedule-display">
-            <div class="info-card">
-                <p>Оберіть клас і день для перегляду розкладу</p>
-            </div>
-        </div>
-    `;
-    openModal('schedule-modal', '📅 Розклад занять', content);
-    setTimeout(() => updateSchedule(), 100);
+            const selectedClass = document.getElementById('schedule-class').value;
+            const day = this.getAttribute('data-day');
+            document.getElementById('schedule-display').innerHTML = renderScheduleTable(selectedClass, day);
+        });
+    });
 }
 
-function selectDay(day, element) {
-    document.querySelectorAll('.day-button').forEach(btn => btn.classList.remove('active'));
-    element.classList.add('active');
-    updateSchedule();
-}
-
-function updateSchedule() {
-    const classSelect = document.getElementById('class-select');
-    const dayButton = document.querySelector('.day-button.active');
-    if (!classSelect || !dayButton) return;
+// Генерація таблиці розкладу
+function renderScheduleTable(selectedClass, day) {
+    const lessons = rozklad[selectedClass] && rozklad[selectedClass][day];
     
-    const selectedClass = classSelect.value;
-    const selectedDay = dayButton.dataset.day;
-    displaySchedule(selectedClass, selectedDay);
-}
-
-
-function displaySchedule(classNum, day) {
-    const scheduleDisplay = document.getElementById('schedule-display');
-    
-    let actualDay = day;
-    if (day === "Пятниця") {
-        actualDay = "П'ятниця";
+    if (!lessons || lessons.length === 0) {
+        return `<p>На ${day.toLowerCase()} у ${selectedClass} класі занять немає.</p>`;
     }
     
-    const lessons = rozklad[classNum]?.[actualDay] || [];
-    
-    if (lessons.length === 0) {
-        scheduleDisplay.innerHTML = `
-            <div class="info-card">
-                <h3>📚 ${classNum} клас - ${actualDay}</h3>
-                <p>На цей день уроків не знайдено</p>
-            </div>
-        `;
-        return;
-    }
-    
-    let html = `
-        <div class="schedule-header">
-            <h3>📚 ${classNum} клас - ${actualDay}</h3>
-        </div>
+    let tableHtml = `
         <table class="schedule-table">
             <thead>
                 <tr>
-                    <th>№</th>
                     <th>Урок</th>
+                    <th>Час</th>
+                    <th>Предмет</th>
                 </tr>
             </thead>
             <tbody>
     `;
     
     lessons.forEach((lesson, index) => {
-        html += `
+        const bell = bells[index];
+        tableHtml += `
             <tr>
-                <td><strong>${index + 1}</strong></td>
+                <td>${index + 1}</td>
+                <td>${bell ? `${bell.start} - ${bell.end}` : ''}</td>
                 <td>${lesson}</td>
             </tr>
         `;
     });
     
-    html += `
+    tableHtml += `
             </tbody>
         </table>
     `;
     
-    scheduleDisplay.innerHTML = html;
+    return tableHtml;
 }
 
-function showBooks() {
-    let html = `
-        <div class="info-card">
-            <h3>📖 Онлайн підручники 8 класу</h3>
-            <p>Доступні електронні версії підручників:</p>
+// Модальне вікно підручників
+function openBooksModal() {
+    const modalContent = `
+        <div class="modal-header">
+            <h2>📚 Онлайн підручники</h2>
+            <button class="close-button">&times;</button>
         </div>
-        <div class="books-list">
-            <ul class="book-list">
+        <div class="modal-content">
+            <div class="schedule-controls">
+                <select class="class-selector" id="books-class">
+                    ${Object.keys(books).map(cls => `<option value="${cls}">${cls} клас</option>`).join('')}
+                </select>
+            </div>
+            <div class="books-list" id="books-list">
+                ${renderBooksList('5')}
+            </div>
+        </div>
     `;
     
-    for (const [subject, url] of Object.entries(ebooks_8)) {
-        html += `
+    showModal(modalContent, 'books-modal');
+    
+    // Додаємо обробники подій
+    document.getElementById('books-class').addEventListener('change', function() {
+        const selectedClass = this.value;
+        document.getElementById('books-list').innerHTML = renderBooksList(selectedClass);
+    });
+}
+
+// Генерація списку книг
+function renderBooksList(selectedClass) {
+    const classBooks = books[selectedClass];
+    
+    if (!classBooks || Object.keys(classBooks).length === 0) {
+        return `<p>Для ${selectedClass} класу підручники відсутні.</p>`;
+    }
+    
+    let listHtml = `<ul class="book-list">`;
+    
+    for (const [subject, url] of Object.entries(classBooks)) {
+        listHtml += `
             <li class="book-item">
-                <span class="book-icon">📚</span>
-                <a href="${url}" target="_blank" class="book-link" onclick="event.stopPropagation();">
-                    ${subject}
-                </a>
-                <span class="external-icon">↗</span>
+                <span class="book-icon">📖</span>
+                <a href="${url}" target="_blank" class="book-link">${subject} <span class="external-icon">↗</span></a>
             </li>
         `;
     }
     
-    html += `
-            </ul>
-        </div>
-        <div class="info-card">
-            <p><strong>ℹ️ Всі посилання відкриються у новому вікні</strong></p>
-        </div>
-    `;
-    
-    openModal('books-modal', '📖 Онлайн підручники', html);
+    listHtml += `</ul>`;
+    return listHtml;
 }
 
-function showBells() {
-    let html = `
-        <div class="info-card">
-            <h3>🔔 Розклад дзвінків</h3>
-            <p>Час уроків та перерв:</p>
+// Модальне вікно розкладу дзвінків
+function openBellsModal() {
+    const modalContent = `
+        <div class="modal-header">
+            <h2>🔔 Розклад дзвінків</h2>
+            <button class="close-button">&times;</button>
         </div>
-        <div class="bells-list">
-            <ul>
+        <div class="modal-content">
+            <div class="bells-list">
+                ${renderBellsList()}
+            </div>
+        </div>
     `;
     
-    ROZKLAD_BELLS.forEach(([lesson, time]) => {
-        const isBreak = lesson.includes('перерва');
-        html += `
-            <li class="bell-item">
+    showModal(modalContent, 'bells-modal');
+}
+
+// Генерація списку дзвінків
+function renderBellsList() {
+    let listHtml = '';
+    
+    bells.forEach(bell => {
+        listHtml += `
+            <div class="bell-item">
                 <div class="bell-info">
-                    <span class="bell-icon">${isBreak ? '🔄' : '📚'}</span>
-                    <span class="bell-text">${lesson}</span>
+                    <span class="bell-icon">🔔</span>
+                    <span>${bell.lesson} урок</span>
                 </div>
-                <span class="bell-time">${time}</span>
-            </li>
+                <span class="bell-time">${bell.start} - ${bell.end}</span>
+            </div>
         `;
     });
     
-    html += `
-            </ul>
-            <div class="info-card">
-                <p><strong>⏰ Загальна тривалість навчального дня:</strong> 6 год 50 хв</p>
-            </div>
-        </div>
-    `;
-    
-    openModal('bells-modal', '🔔 Розклад дзвінків', html);
+    return listHtml;
 }
 
-function showInfo() {
-    const content = `
-        <div class="info-content">
-            <div class="info-card">
-                <h3>ℹ️ Про School Bot</h3>
-                <p>Навчальний помічник для учнів та вчителів</p>
-            </div>
-            
-            <div class="info-card">
-                <h3>📞 Екстрені служби</h3>
-                <ul>
-                    <li>🚒 101 - Пожежна служба</li>
-                    <li>🚓 102 - Поліція</li>
-                    <li>🚑 103 - Швидка допомога</li>
-                    <li>⚠️ 104 - Газова служба</li>
-                </ul>
-            </div>
-            
-            <div class="info-card">
-                <h3>🔗 Підтримка</h3>
-                <p>Telegram: <a href="https://t.me/random_childbot_support" target="_blank" onclick="event.stopPropagation();">@random_childbot_support</a></p>
-            </div>
+// Модальне вікно випадкового учня
+function openRandomStudentModal() {
+    const modalContent = `
+        <div class="modal-header">
+            <h2>🎲 Випадковий учень</h2>
+            <button class="close-button">&times;</button>
         </div>
-    `;
-    openModal('info-modal', '📋 Інформація', content);
-}
-
-function showClasses() {
-    const content = `
-        <div class="feature-body">
+        <div class="modal-content">
             <div class="info-card">
-                <h3>👥 Управління класами</h3>
-                <p>Функція доступна у повній версії Telegram бота</p>
-                <p><strong>Команди:</strong></p>
-                <ul>
-                    <li><code>/add_class</code> - додати клас</li>
-                    <li><code>/add_children</code> - додати учнів</li>
-                    <li><code>/list_class</code> - список класів</li>
-                    <li><code>/list_children</code> - список учнів</li>
-                </ul>
+                <h3>Функціонал у розробці</h3>
+                <p>Ця функція буде доступна у наступних оновленнях.</p>
             </div>
             <div class="action-buttons">
-                <button class="btn primary" onclick="openTelegram()">📱 Відкрити в Telegram</button>
+                <button class="btn primary" id="random-student-btn">Обрати учня</button>
             </div>
         </div>
     `;
-    openModal('classes-modal', '👥 Управління класами', content);
+    
+    showModal(modalContent, 'random-modal');
+    
+    // Додаємо обробник подій
+    document.getElementById('random-student-btn').addEventListener('click', () => {
+        tg.showPopup({
+            title: "Випадковий учень",
+            message: "Учень №" + (Math.floor(Math.random() * 30) + 1) + " буде відповідати!",
+            buttons: [{type: 'ok'}]
+        });
+    });
 }
 
-function openTelegram() {
-    const telegramUrl = 'tg://resolve?domain=random_childbot_support';
-    window.open(telegramUrl, '_blank');
+// Модальне вікно управління класами
+function openClassesModal() {
+    const modalContent = `
+        <div class="modal-header">
+            <h2>👥 Управління класами</h2>
+            <button class="close-button">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div class="info-card">
+                <h3>Доступні класи</h3>
+                <p>${classes.join(', ')} класи</p>
+            </div>
+            <div class="action-buttons">
+                <button class="btn primary" id="add-class-btn">Додати клас</button>
+                <button class="btn secondary" id="remove-class-btn">Видалити клас</button>
+            </div>
+        </div>
+    `;
     
-    setTimeout(() => {
-        window.location.href = 'https://t.me/random_childbot_support';
-    }, 500);
+    showModal(modalContent, 'classes-modal');
     
+    // Додаємо обробники подій
+    document.getElementById('add-class-btn').addEventListener('click', () => {
+        tg.showPopup({
+            title: "Додати клас",
+            message: "Функція додавання класу у розробці",
+            buttons: [{type: 'ok'}]
+        });
+    });
+    
+    document.getElementById('remove-class-btn').addEventListener('click', () => {
+        tg.showPopup({
+            title: "Видалити клас",
+            message: "Функція видалення класу у розробці",
+            buttons: [{type: 'ok'}]
+        });
+    });
+}
+
+// Модальне вікно інформації
+function openInfoModal() {
+    const modalContent = `
+        <div class="modal-header">
+            <h2>📋 Інформація</h2>
+            <button class="close-button">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div class="info-card">
+                <h3>Про додаток</h3>
+                <p>Навчальний портал - це зручний спосіб отримати доступ до розкладу занять, підручників та іншої навчальної інформації.</p>
+            </div>
+            <div class="info-card">
+                <h3>Версія</h3>
+                <p>Поточна версія: 1.0</p>
+            </div>
+            <div class="info-card">
+                <h3>Підтримка</h3>
+                <p>З питань роботи додатку звертайтеся до @random_childbot_support або @DC_sk8.</p>
+            </div>
+        </div>
+    `;
+    
+    showModal(modalContent, 'info-modal');
+}
+
+// Показати модальне вікно
+function showModal(content, modalId) {
+    // Закриваємо попереднє модальне вікно, якщо воно є
     if (currentModal) {
-        closeModal(currentModal);
+        closeModal();
+    }
+    
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    modalOverlay.id = modalId;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = content;
+    
+    modalOverlay.appendChild(modal);
+    document.body.appendChild(modalOverlay);
+    
+    // Додаємо обробник закриття
+    const closeButton = modal.querySelector('.close-button');
+    if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
+    }
+    
+    // Додаємо обробник кліку на оверлей
+    modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+    
+    // Показуємо модальне вікно
+    setTimeout(() => {
+        modalOverlay.classList.add('active');
+    }, 10);
+    
+    currentModal = modalOverlay;
+}
+
+// Закрити модальне вікно
+function closeModal() {
+    if (currentModal) {
+        currentModal.classList.remove('active');
+        setTimeout(() => {
+            if (currentModal && currentModal.parentNode) {
+                currentModal.parentNode.removeChild(currentModal);
+            }
+            currentModal = null;
+        }, 300);
     }
 }
 
-// Обробка подій
-function setupTelegramEvents() {
-    tg.onEvent('viewportChanged', (event) => {
-        console.log('Viewport changed:', event);
-    });
-    
-    tg.onEvent('themeChanged', (event) => {
-        console.log('Theme changed:', event);
-        updateTheme();
-    });
-}
-
-function updateTheme() {
-    const theme = tg.colorScheme;
-    if (theme === 'dark') {
-        document.documentElement.style.setProperty('--background-color', '#1a1a1a');
-        document.documentElement.style.setProperty('--card-color', '#2d2d2d');
-        document.documentElement.style.setProperty('--text-primary', '#ffffff');
-        document.documentElement.style.setProperty('--text-secondary', '#cccccc');
-        document.documentElement.style.setProperty('--border-color', '#444444');
-    }
-}
-
-// Ініціалізація
-document.addEventListener('DOMContentLoaded', function() {
-    initUser();
-    setupTelegramEvents();
-    updateTheme();
-    
-    // Додаємо обробники кліків для кнопок
-    const navCards = document.querySelectorAll('.nav-card');
-    const features = ['random', 'schedule', 'books', 'bells', 'info', 'classes'];
-    
-    navCards.forEach((card, index) => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => showFeature(features[index]));
-    });
-});
-
-// Обробка посилань
-document.addEventListener('click', function(e) {
-    if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes('telegram-school-bot.vercel.app')) {
-        e.preventDefault();
-        window.open(e.target.href, '_blank');
-    }
-});
-
-// Закриття по ESC
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && currentModal) {
-        closeModal(currentModal);
-    }
-});
+// Ініціалізація додатку при завантаженні
+document.addEventListener('DOMContentLoaded', initApp);
