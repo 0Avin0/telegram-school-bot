@@ -149,7 +149,7 @@ function showSchedule() {
                 <button class="day-button" data-day="Вівторок" onclick="selectDay('Вівторок', this)">Вівторок</button>
                 <button class="day-button" data-day="Середа" onclick="selectDay('Середа', this)">Середа</button>
                 <button class="day-button" data-day="Четвер" onclick="selectDay('Четвер', this)">Четвер</button>
-                <button class="day-button" data-day="П'ятниця" onclick="selectDay('П\'ятниця', this)">П'ятниця</button>
+                <button class="day-button" data-day="П'ятниця" onclick="selectDay('Пятниця', this)">П'ятниця</button>
             </div>
         </div>
         <div id="schedule-display"></div>
@@ -186,12 +186,19 @@ function updateSchedule() {
 
 function displaySchedule(classNum, day) {
     const scheduleDisplay = document.getElementById('schedule-display');
-    const lessons = rozklad[classNum]?.[day] || [];
+    
+    // Виправлення для П'ятниці - перевіряємо обидва варіанти написання
+    let actualDay = day;
+    if (day === "Пятниця") {
+        actualDay = "П'ятниця";
+    }
+    
+    const lessons = rozklad[classNum]?.[actualDay] || [];
     
     if (lessons.length === 0) {
         scheduleDisplay.innerHTML = `
             <div class="info-card">
-                <p>На ${day} у ${classNum} класі немає уроків.</p>
+                <p>На ${actualDay} у ${classNum} класі немає уроків.</p>
             </div>
         `;
         return;
@@ -199,7 +206,7 @@ function displaySchedule(classNum, day) {
     
     let html = `
         <div class="schedule-header">
-            <h3>${classNum} клас - ${day}</h3>
+            <h3>${classNum} клас - ${actualDay}</h3>
         </div>
         <table class="schedule-table">
             <thead>
