@@ -1,4 +1,16 @@
-// Дані синхронізовані з config.py бота
+// Ініціалізація Telegram WebApp
+let tg = window.Telegram.WebApp;
+tg.expand();
+tg.enableClosingConfirmation();
+
+// Елементи DOM
+const userNameElement = document.getElementById('user-name');
+const userIdElement = document.getElementById('user-id');
+const userPhotoElement = document.getElementById('user-photo');
+const userPhotoMainElement = document.getElementById('user-photo-main');
+const featureContentElement = document.getElementById('feature-content');
+
+// Дані синхронізовані з config.py
 const rozklad = {
     "5": {
         "Понеділок": ["Українська мова","Математика","Англійська мова","Мистецтво","Українська література","Пізнаємо природу"],
@@ -37,13 +49,36 @@ const rozklad = {
     }
 };
 
+const ebooks_8 = {
+    "Інформатика": "https://pidruchnyk.com.ua/3011-informatyka-ryvkind-8-klas-2025.html",
+    "Геометрія": "https://pidruchnyk.com.ua/2915-geometriia-burda-8-klas-2025.html",
+    "Англійська мова": "https://pidruchnyk.com.ua/2896-angliiska-mova-mitchell-8-klas.html",
+    "Технологія (хлопці)": "https://pidruchnyk.com.ua/2953-tekhnologii-bilenko-8-klas-2025.html",
+    "Зарубіжна література": "https://pidruchnyk.com.ua/2993-zarubizhna-literatura-milianovska-8-klas-2025.html",
+    "Історія України": "https://pidruchnyk.com.ua/3016-istoriia-ukrainy-pometun-8-klas-2025.html",
+    "Українська література": "https://pidruchnyk.com.ua/2962-ukrainska-literatura-avramenko-8-klas-2025.html",
+    "Німецька мова": "https://pidruchnyk.com.ua/2941-nimecka-sotnykova-8-klas-2025-4rik.html",
+    "Технологія (дівчата)": "https://pidruchnyk.com.ua/2951-tekhnologii-khodzycka-8-klas-2025.html",
+    "Підприємство та фінансова грамотність": "https://pidruchnyk.com.ua/2948-pidpryiemnyctvo-i-finansova-gramotnist-kuzniecova-8-klas-2025.html",
+    "Хімія": "https://pidruchnyk.com.ua/2920-khimiia-midak-8-klas-2025.html",
+    "Географія": "https://pidruchnyk.com.ua/2984-geografiia-gilberg-8-klas-2025.html",
+    "Біологія": "https://pidruchnyk.com.ua/2925-biologiia-balan-8-klas-2025.html",
+    "Мистецтво": "https://pidruchnyk.com.ua/2938-mystectvo-masol-8-klas-2025.html",
+    "Фізика": "https://pidruchnyk.com.ua/2971-fizyka-bariakhtar-8-klas-2025.html",
+    "Алгебра": "https://pidruchnyk.com.ua/2909-algebra-tarasenkova-8-klas-2025.html",
+    "Здоров'я, безпека та добробут": "https://pidruchnyk.com.ua/3000-zdorovia-bezpeka-ta-dobrobut-shyian-8-klas-2025.html",
+    "Українська мова": "https://pidruchnyk.com.ua/2899-ukrainska-mova-avramenko-8-klas-2025.html",
+    "Громадська освіта": "https://pidruchnyk.com.ua/2988-gromadianska-osvita-vasylkiv-8-klas-2025.html",
+    "Всесвітня історія": "https://pidruchnyk.com.ua/2977-vsesvitnia-istoriia-pometun-8-klas-2025.html"
+};
+
 const ROZKLAD_BELLS = [
     ["1 урок", "8:30-9:10"],
     ["перерва", "9:10-9:20 (10 хв)"],
     ["2 урок", "9:20-10:00"], 
     ["перерва", "10:00-10:20 (20 хв)"],
     ["3 урок", "10:20-11:00"],
-    ["перерва", "11:00-11:15 (15 хv)"],
+    ["перерва", "11:00-11:15 (15 хв)"],
     ["4 урок", "11:15-11:55"],
     ["перерва", "11:55-12:10 (15 хв)"],
     ["5 урок", "12:10-12:50"],
@@ -55,34 +90,76 @@ const ROZKLAD_BELLS = [
     ["8 урок", "14:40-15:20"]
 ];
 
-// Ініціалізація
-document.addEventListener('DOMContentLoaded', function() {
-    initTelegram();
-});
-
-function initTelegram() {
-    if (typeof Telegram !== 'undefined') {
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+// Ініціалізація користувача
+function initUser() {
+    const user = tg.initDataUnsafe.user;
+    if (user) {
+        const userName = `${user.first_name} ${user.last_name || ''}`.trim();
+        userNameElement.textContent = userName;
+        userIdElement.textContent = `ID: ${user.id}`;
         
-        const user = tg.initDataUnsafe.user;
-        if (user) {
-            document.getElementById('user-name').textContent = 
-                `${user.first_name} ${user.last_name || ''}`;
-            document.getElementById('user-id').textContent = `ID: ${user.id}`;
-            
-            if (user.photo_url) {
-                document.getElementById('user-photo').src = user.photo_url;
-            }
+        if (user.photo_url) {
+            userPhotoElement.src = user.photo_url;
+            userPhotoMainElement.src = user.photo_url;
         }
     }
 }
 
+// Функції для відображення контенту
+function showFeature(feature) {
+    const welcomeMessage = document.querySelector('.welcome-message');
+    if (welcomeMessage) {
+        welcomeMessage.classList.add('hidden');
+    }
+    
+    switch(feature) {
+        case 'random':
+            showRandomStudent();
+            break;
+        case 'schedule':
+            showSchedule();
+            break;
+        case 'books':
+            showBooks();
+            break;
+        case 'bells':
+            showBells();
+            break;
+        case 'info':
+            showInfo();
+            break;
+        case 'classes':
+            showClasses();
+            break;
+    }
+}
+
+function showRandomStudent() {
+    featureContentElement.innerHTML = `
+        <div class="feature-header">
+            <h2>🎲 Випадковий учень</h2>
+            <p>Функція для вчителів</p>
+        </div>
+        <div class="feature-body">
+            <div class="info-card">
+                <p>Ця функція доступна у повній версії Telegram бота.</p>
+                <p>Використовуйте команду <code>/random_child</code> або кнопку "🎲 Випадковий учень" у меню бота.</p>
+            </div>
+            <div class="action-buttons">
+                <button class="btn primary" onclick="openTelegram()">Відкрити в Telegram</button>
+            </div>
+        </div>
+    `;
+}
+
 function showSchedule() {
-    const content = `
-        <h2>📅 Розклад занять</h2>
+    featureContentElement.innerHTML = `
+        <div class="feature-header">
+            <h2>📅 Розклад занять</h2>
+            <p>Оберіть клас та день тижня</p>
+        </div>
         <div class="schedule-controls">
-            <select id="classSelect" onchange="updateSchedule()">
+            <select class="class-selector" id="class-select" onchange="updateSchedule()">
                 <option value="5">5 клас</option>
                 <option value="6">6 клас</option>
                 <option value="7">7 клас</option>
@@ -90,29 +167,42 @@ function showSchedule() {
                 <option value="9">9 клас</option>
             </select>
             
-            <select id="daySelect" onchange="updateSchedule()">
-                <option value="Понеділок">Понеділок</option>
-                <option value="Вівторок">Вівторок</option>
-                <option value="Середа">Середа</option>
-                <option value="Четвер">Четвер</option>
-                <option value="П'ятниця">П'ятниця</option>
-            </select>
+            <div class="day-buttons" id="day-buttons">
+                <button class="day-button active" data-day="Понеділок" onclick="selectDay('Понеділок', this)">Понеділок</button>
+                <button class="day-button" data-day="Вівторок" onclick="selectDay('Вівторок', this)">Вівторок</button>
+                <button class="day-button" data-day="Середа" onclick="selectDay('Середа', this)">Середа</button>
+                <button class="day-button" data-day="Четвер" onclick="selectDay('Четвер', this)">Четвер</button>
+                <button class="day-button" data-day="П'ятниця" onclick="selectDay('П\'ятниця', this)">П'ятниця</button>
+            </div>
         </div>
-        <div id="schedule-display">
-            <p>Оберіть клас та день для перегляду розкладу</p>
-        </div>
+        <div id="schedule-display"></div>
     `;
-    document.getElementById('content').innerHTML = content;
+    
+    // Відображаємо розклад для першого дня
+    updateSchedule();
+}
+
+function selectDay(day, element) {
+    // Видаляємо активний клас з усіх кнопок
+    document.querySelectorAll('.day-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Додаємо активний клас до обраної кнопки
+    element.classList.add('active');
+    
+    // Оновлюємо розклад
+    updateSchedule();
 }
 
 function updateSchedule() {
-    const classSelect = document.getElementById('classSelect');
-    const daySelect = document.getElementById('daySelect');
+    const classSelect = document.getElementById('class-select');
+    const dayButton = document.querySelector('.day-button.active');
     
-    if (!classSelect || !daySelect) return;
+    if (!classSelect || !dayButton) return;
     
     const selectedClass = classSelect.value;
-    const selectedDay = daySelect.value;
+    const selectedDay = dayButton.dataset.day;
     
     displaySchedule(selectedClass, selectedDay);
 }
@@ -161,37 +251,204 @@ function displaySchedule(classNum, day) {
     scheduleDisplay.innerHTML = html;
 }
 
-// Решта функцій залишаються без змін...
 function showBooks() {
-    const content = `
-        <h2>📖 Онлайн підручники 8 класу</h2>
-        <p>Функція в розробці. Використовуйте Telegram бота для доступу до підручників.</p>
+    let html = `
+        <div class="feature-header">
+            <h2>📖 Онлайн підручники 8 класу</h2>
+            <p>Електронні версії підручників</p>
+        </div>
+        <div class="books-list">
+            <ul class="book-list">
     `;
-    document.getElementById('content').innerHTML = content;
+    
+    for (const [subject, url] of Object.entries(ebooks_8)) {
+        html += `
+            <li class="book-item">
+                <span class="book-icon">📚</span>
+                <a href="${url}" target="_blank" class="book-link">${subject}</a>
+                <span class="external-icon">↗</span>
+            </li>
+        `;
+    }
+    
+    html += `
+            </ul>
+        </div>
+    `;
+    
+    featureContentElement.innerHTML = html;
 }
 
+
 function showBells() {
-    let content = `<h2>🔔 Розклад дзвінків</h2><ul>`;
+    let html = `
+        <div class="feature-header">
+            <h2>🔔 Розклад дзвінків</h2>
+            <p>Час уроків та перерв</p>
+        </div>
+        <div class="bells-list">
+            <ul>
+    `;
     
     ROZKLAD_BELLS.forEach(([lesson, time]) => {
-        content += `<li><strong>${lesson}:</strong> ${time}</li>`;
+        const isBreak = lesson.includes('перерва');
+        html += `
+            <li class="bell-item">
+                <div class="bell-info">
+                    <span class="bell-icon">${isBreak ? '🔄' : '📚'}</span>
+                    <span class="bell-text">${lesson}</span>
+                </div>
+                <span class="bell-time">${time}</span>
+            </li>
+        `;
     });
     
-    content += `</ul><p><strong>Загальна тривалість:</strong> 6 год 50 хв</p>`;
-    document.getElementById('content').innerHTML = content;
+    html += `
+            </ul>
+            <div class="info-card">
+                <p><strong>Загальна тривалість навчального дня:</strong> 6 год 50 хв</p>
+            </div>
+        </div>
+    `;
+    
+    featureContentElement.innerHTML = html;
 }
 
 function showInfo() {
-    const content = `
-        <h2>📋 Інформація</h2>
-        <p>ℹ️ School Bot - навчальний помічник</p>
-        <p>📞 Екстрені служби:</p>
-        <ul>
-            <li>101 - Пожежна</li>
-            <li>102 - Поліція</li>
-            <li>103 - Швидка</li>
-            <li>104 - Газова</li>
-        </ul>
+    featureContentElement.innerHTML = `
+        <div class="feature-header">
+            <h2>📋 Інформація</h2>
+            <p>Корисні дані та контакти</p>
+        </div>
+        <div class="info-content">
+            <div class="info-card">
+                <h3>ℹ️ Про бота</h3>
+                <p>School Bot - це навчальний помічник з повним функціоналом для учнів та вчителів.</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>📞 Екстрені служби</h3>
+                <ul>
+                    <li>🚒 101 - Пожежна служба</li>
+                    <li>🚓 102 - Поліція</li>
+                    <li>🚑 103 - Швидка допомога</li>
+                    <li>⚠️ 104 - Газова служба</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🔗 Корисні посилання</h3>
+                <p>Telegram бот: <a href="https://t.me/your_bot" target="_blank">@school_helper_bot</a></p>
+                <p>Веб-версія: <a href="https://telegram-school-bot.vercel.app" target="_blank">telegram-school-bot.vercel.app</a></p>
+            </div>
+        </div>
     `;
-    document.getElementById('content').innerHTML = content;
 }
+
+function showClasses() {
+    featureContentElement.innerHTML = `
+        <div class="feature-header">
+            <h2>👥 Управління класами</h2>
+            <p>Функція для вчителів</p>
+        </div>
+        <div class="feature-body">
+            <div class="info-card">
+                <p>Ця функція доступна у повній версії Telegram бота.</p>
+                <p>Використовуйте команди у боті для керування класами:</p>
+                <ul>
+                    <li><code>/add_class</code> - додати клас</li>
+                    <li><code>/add_children</code> - додати учнів</li>
+                    <li><code>/list_class</code> - список класів</li>
+                    <li><code>/list_children</code> - список учнів</li>
+                    <li><code>/delete_class</code> - видалити клас</li>
+                    <li><code>/delete_child</code> - видалити учня</li>
+                </ul>
+            </div>
+            <div class="action-buttons">
+                <button class="btn primary" onclick="openTelegram()">Відкрити в Telegram</button>
+            </div>
+        </div>
+    `;
+}
+
+function openTelegram() {
+    // Спроба відкрити Telegram через deeplink
+    const telegramUrl = 'tg://resolve?domain=your_bot';
+    window.open(telegramUrl, '_blank');
+    
+    // Fallback для браузерів
+    setTimeout(() => {
+        window.location.href = 'https://t.me/your_bot';
+    }, 500);
+}
+
+function showLoading() {
+    featureContentElement.innerHTML = `
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Завантаження...</p>
+        </div>
+    `;
+}
+
+function showError(message) {
+    featureContentElement.innerHTML = `
+        <div class="error-message">
+            <h3>❌ Помилка</h3>
+            <p>${message}</p>
+        </div>
+    `;
+}
+
+function showSuccess(message) {
+    featureContentElement.innerHTML = `
+        <div class="success-message">
+            <h3>✅ Успіх</h3>
+            <p>${message}</p>
+        </div>
+    `;
+}
+
+// Обробка подій Telegram WebApp
+function setupTelegramEvents() {
+    tg.onEvent('viewportChanged', (event) => {
+        console.log('Viewport changed:', event);
+    });
+    
+    tg.onEvent('themeChanged', (event) => {
+        console.log('Theme changed:', event);
+        updateTheme();
+    });
+}
+
+function updateTheme() {
+    const theme = tg.colorScheme;
+    if (theme === 'dark') {
+        document.documentElement.style.setProperty('--background-color', '#1a1a1a');
+        document.documentElement.style.setProperty('--card-color', '#2d2d2d');
+        document.documentElement.style.setProperty('--text-primary', '#ffffff');
+        document.documentElement.style.setProperty('--text-secondary', '#cccccc');
+        document.documentElement.style.setProperty('--border-color', '#444444');
+    } else {
+        document.documentElement.style.setProperty('--background-color', '#f5f8fa');
+        document.documentElement.style.setProperty('--card-color', '#ffffff');
+        document.documentElement.style.setProperty('--text-primary', '#223344');
+        document.documentElement.style.setProperty('--text-secondary', '#556677');
+        document.documentElement.style.setProperty('--border-color', '#e1e8ed');
+    }
+}
+
+// Ініціалізація при завантаженні сторінки
+document.addEventListener('DOMContentLoaded', function() {
+    initUser();
+    setupTelegramEvents();
+    updateTheme();
+});
+
+// Обробка кліків по зовнішнім посиланням
+document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes('telegram-school-bot.vercel.app')) {
+        e.preventDefault();
+        window.open(e.target.href, '_blank');
+    }
+});
