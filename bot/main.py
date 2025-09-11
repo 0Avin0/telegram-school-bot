@@ -23,7 +23,7 @@ def start(message):
         message.chat.id,
         "👋 Вітаю! Я навчальний бот\n\n"
         "🔹 Випадковий учень - для вчителів\n"
-        "🔹 Розклад - розклад занять 5-8 класів\n"
+        "🔹 Розклад - розклад занять 5-9 класів\n"
         "🔹 Онлайн підручники - підручники 8 класу\n"
         "🔹 Розклад дзвінків - розклад уроків та перерв\n"
         "🔹 Інформація - корисна інформація",
@@ -59,7 +59,7 @@ def info(message):
     info_text = (
         "ℹ️ Інформація про бота:\n\n"
         "🎲 Випадковий учень - для вчителів\n"
-        "📅 Розклад - розклад занять 5-8 класів\n"
+        "📅 Розклад - розклад занять 5-9 класів\n"
         "📖 Онлайн підручники - підручники 8 класу\n"
         "🔔 Розклад дзвінків - розклад уроків та перерв\n\n"
         "📞 Екстрені служби:\n"
@@ -106,7 +106,7 @@ def callback_book(call):
 @bot.message_handler(commands=['rozklad'])
 def command_rozklad(message):
     markup = InlineKeyboardMarkup()
-    for cls, icon in [("5","📘"),("6","📗"),("7","📕"),("8","📙")]:
+    for cls, icon in [("5","📘"),("6","📗"),("7","📕"),("8","📙"),("9","📓")]:
         markup.add(InlineKeyboardButton(f"{icon} {cls} клас", callback_data=f"rozklad_class_{cls}"))
     bot.send_message(message.chat.id, "Оберіть клас:", reply_markup=markup)
 
@@ -149,7 +149,7 @@ def add_child_step(message):
         markup.add(InlineKeyboardButton(c, callback_data=f"add_child_{sanitize_callback_data(c)}"))
     bot.send_message(message.chat.id, "Оберіть клас для додавання учнів:", reply_markup=markup)
 
-# ------------------ СПИСОК КЛАСІВ ------------------
+# ------------------ СПИСОК КЛАСІв ------------------
 @bot.message_handler(commands=['list_class'])
 def list_class(message):
     user_data = get_user_data(message.from_user)
@@ -406,60 +406,6 @@ def handle_state_messages(message):
         else:
             bot.send_message(message.chat.id, "❌ Не додано жодного учня. Перевірте імена.")
         user_states.pop(message.from_user.id, None)
-
-# Додайте цю функцію для генерації посилання на Mini App
-def generate_mini_app_url():
-    return "https://telegram-school-bot.vercel.app/"
-
-# Оновіть функцію start
-@bot.message_handler(commands=['start'])
-def start(message):
-    get_user_data(message.from_user)
-    markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.row(KeyboardButton("🎲 Випадковий учень"), KeyboardButton("📅 Розклад"))
-    markup.row(KeyboardButton("📖 Онлайн підручники"), KeyboardButton("🔔 Розклад дзвінків"))
-    markup.row(KeyboardButton("📋 Інформація"), KeyboardButton("📱 Mini App"))
-    
-    mini_app_url = generate_mini_app_url()
-    
-    bot.send_message(
-        message.chat.id,
-        f"👋 Вітаю! Я навчальний бот\n\n"
-        f"🔹 Випадковий учень - для вчителів\n"
-        f"🔹 Розклад - розклад занять 5-8 класів\n"
-        f"🔹 Онлайн підручники - підручники 8 класу\n"
-        f"🔹 Розклад дзвінків - розклад уроків та перерв\n"
-        f"🔹 Інформація - корисна інформація\n"
-        f"🔹 Mini App - повноцінний веб-додаток\n\n"
-        f"🌐 Mini App: {mini_app_url}",
-        reply_markup=markup
-    )
-
-# Додайте обробник для Mini App
-@bot.message_handler(func=lambda m: m.text == "📱 Mini App")
-def mini_app_button(message):
-    mini_app_url = generate_mini_app_url()
-    markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton("📱 Відкрити Mini App", url=mini_app_url))
-    
-    bot.send_message(
-        message.chat.id,
-        f"🌐 Натисніть кнопку нижче, щоб відкрити Mini App:\n{mini_app_url}",
-        reply_markup=markup
-    )
-
-# Додайте команду для прямого посилання
-@bot.message_handler(commands=['webapp'])
-def webapp_command(message):
-    mini_app_url = generate_mini_app_url()
-    markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton("📱 Відкрити Mini App", url=mini_app_url))
-    
-    bot.send_message(
-        message.chat.id,
-        f"🌐 Mini App доступний за посиланням:\n{mini_app_url}",
-        reply_markup=markup
-    )
 
 # ------------------ НЕВІДОМІ КОМАНДИ ------------------
 @bot.message_handler(func=lambda m: m.text and m.text.startswith("/"))
