@@ -67,6 +67,9 @@ const ROZKLAD_BELLS = [
     ["8 урок", "14:40-15:20"]
 ];
 
+// Поточний активний модальний
+let currentModal = null;
+
 // Ініціалізація користувача
 function initUser() {
     const user = tg.initDataUnsafe.user;
@@ -82,13 +85,51 @@ function initUser() {
     }
 }
 
-// Функції для відображення контенту
-function showFeature(feature) {
-    const welcomeMessage = document.querySelector('.welcome-message');
-    if (welcomeMessage) {
-        welcomeMessage.classList.add('hidden');
+// Функції для модальних вікон
+function openModal(modalId, title, content) {
+    // Закриваємо поточний модальний, якщо є
+    if (currentModal) {
+        closeModal(currentModal);
     }
     
+    const modalHtml = `
+        <div class="modal-overlay active" id="${modalId}-overlay">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>${title}</h2>
+                    <button class="close-button" onclick="closeModal('${modalId}')">×</button>
+                </div>
+                <div class="modal-content">
+                    ${content}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    currentModal = modalId;
+    
+    // Додаємо обробник для закриття по кліку на оверлей
+    document.getElementById(`${modalId}-overlay`).addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal(modalId);
+        }
+    });
+}
+
+function closeModal(modalId) {
+    const overlay = document.getElementById(`${modalId}-overlay`);
+    if (overlay) {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            overlay.remove();
+        }, 300);
+    }
+    currentModal = null;
+}
+
+// Функції для відображення контенту
+function showFeature(feature) {
     switch(feature) {
         case 'random':
             showRandomStudent();
@@ -112,11 +153,7 @@ function showFeature(feature) {
 }
 
 function showRandomStudent() {
-    featureContentElement.innerHTML = `
-        <div class="feature-header">
-            <h2>🎲 Випадковий учень</h2>
-            <p>Функція для вчителів</p>
-        </div>
+    const content = `
         <div class="feature-body">
             <div class="info-card">
                 <p>Ця функція доступна у повній версії Telegram бота.</p>
@@ -127,14 +164,11 @@ function showRandomStudent() {
             </div>
         </div>
     `;
+    openModal('random-modal', '🎲 Випадковий учень', content);
 }
 
 function showSchedule() {
-    featureContentElement.innerHTML = `
-        <div class="feature-header">
-            <h2>📅 Розклад занять</h2>
-            <p>Оберіть клас та день тижня</p>
-        </div>
+    const content = `
         <div class="schedule-controls">
             <select class="class-selector" id="class-select" onchange="updateSchedule()">
                 <option value="5">5 клас</option>
@@ -154,9 +188,10 @@ function showSchedule() {
         </div>
         <div id="schedule-display"></div>
     `;
+    openModal('schedule-modal', '📅 Розклад занять', content);
     
     // Відображаємо розклад для першого дня
-    updateSchedule();
+    setTimeout(updateSchedule, 100);
 }
 
 function selectDay(day, element) {
@@ -187,7 +222,7 @@ function updateSchedule() {
 function displaySchedule(classNum, day) {
     const scheduleDisplay = document.getElementById('schedule-display');
     
-    // Виправлення для П'ятниці - перевіряємо обидва варіанти написання
+    // Виправлення для П'ятниці
     let actualDay = day;
     if (day === "Пятниця") {
         actualDay = "П'ятниця";
@@ -237,10 +272,6 @@ function displaySchedule(classNum, day) {
 
 function showBooks() {
     let html = `
-        <div class="feature-header">
-            <h2>📖 Онлайн підручники 8 класу</h2>
-            <p>Електронні версії підручників</p>
-        </div>
         <div class="books-list">
             <ul class="book-list">
     `;
@@ -260,15 +291,11 @@ function showBooks() {
         </div>
     `;
     
-    featureContentElement.innerHTML = html;
+    openModal('books-modal', '📖 Онлайн підручники 8 класу', html);
 }
 
 function showBells() {
     let html = `
-        <div class="feature-header">
-            <h2>🔔 Розклад дзвінків</h2>
-            <p>Час уроків та перерв</p>
-        </div>
         <div class="bells-list">
             <ul>
     `;
@@ -294,15 +321,11 @@ function showBells() {
         </div>
     `;
     
-    featureContentElement.innerHTML = html;
+    openModal('bells-modal', '🔔 Розклад дзвінків', html);
 }
 
 function showInfo() {
-    featureContentElement.innerHTML = `
-        <div class="feature-header">
-            <h2>📋 Інформація</h2>
-            <p>Корисні дані та контакти</p>
-        </div>
+    const content = `
         <div class="info-content">
             <div class="info-card">
                 <h3>ℹ️ Про бота</h3>
@@ -326,16 +349,11 @@ function showInfo() {
             </div>
         </div>
     `;
+    openModal('info-modal', '📋 Інформація', content);
 }
 
-
-
 function showClasses() {
-    featureContentElement.innerHTML = `
-        <div class="feature-header">
-            <h2>👥 Управління класами</h2>
-            <p>Функція для вчителів</p>
-        </div>
+    const content = `
         <div class="feature-body">
             <div class="info-card">
                 <p>Ця функція доступна у повній версії Telegram бота.</p>
@@ -354,6 +372,7 @@ function showClasses() {
             </div>
         </div>
     `;
+    openModal('classes-modal', '👥 Управління класами', content);
 }
 
 function openTelegram() {
@@ -365,33 +384,11 @@ function openTelegram() {
     setTimeout(() => {
         window.location.href = 'https://t.me/your_bot';
     }, 500);
-}
-
-function showLoading() {
-    featureContentElement.innerHTML = `
-        <div class="loading">
-            <div class="loading-spinner"></div>
-            <p>Завантаження...</p>
-        </div>
-    `;
-}
-
-function showError(message) {
-    featureContentElement.innerHTML = `
-        <div class="error-message">
-            <h3>❌ Помилка</h3>
-            <p>${message}</p>
-        </div>
-    `;
-}
-
-function showSuccess(message) {
-    featureContentElement.innerHTML = `
-        <div class="success-message">
-            <h3>✅ Успіх</h3>
-            <p>${message}</p>
-        </div>
-    `;
+    
+    // Закриваємо модальне вікно
+    if (currentModal) {
+        closeModal(currentModal);
+    }
 }
 
 // Обробка подій Telegram WebApp
@@ -435,5 +432,17 @@ document.addEventListener('click', function(e) {
     if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes('telegram-school-bot.vercel.app')) {
         e.preventDefault();
         window.open(e.target.href, '_blank');
+    }
+    
+    // Закриваємо модальне вікно при кліку на посилання
+    if (e.target.tagName === 'A' && currentModal) {
+        closeModal(currentModal);
+    }
+});
+
+// Закриття модального вікна по клавіші ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && currentModal) {
+        closeModal(currentModal);
     }
 });
