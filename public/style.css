@@ -33,7 +33,6 @@ body {
     flex-direction: column;
 }
 
-/* Хедер */
 .app-header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -62,7 +61,6 @@ body {
     border: 3px solid var(--accent-color);
 }
 
-/* Основной контент */
 .main-content {
     flex: 1;
     padding: 20px;
@@ -102,7 +100,6 @@ body {
     font-size: 14px;
 }
 
-/* Навігаційна сітка */
 .navigation-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -143,7 +140,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* Контент функцій */
 .feature-content {
     background: var(--card-color);
     border-radius: 20px;
@@ -190,7 +186,6 @@ body {
     font-weight: 500;
 }
 
-/* Стилі для розкладу */
 .schedule-controls {
     display: grid;
     gap: 15px;
@@ -255,7 +250,6 @@ body {
     background: #f8f9fa;
 }
 
-/* Стилі для підручників */
 .book-list {
     list-style: none;
 }
@@ -289,7 +283,6 @@ body {
     margin-right: 15px;
 }
 
-/* Стилі для дзвінків */
 .bells-list {
     list-style: none;
 }
@@ -311,7 +304,6 @@ body {
     color: var(--primary-color);
 }
 
-/* Футер */
 .app-footer {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -334,7 +326,6 @@ body {
     text-decoration: underline;
 }
 
-/* Адаптивність */
 @media (max-width: 768px) {
     .navigation-grid {
         grid-template-columns: 1fr;
@@ -368,7 +359,6 @@ body {
     }
 }
 
-/* Анімації */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -384,7 +374,6 @@ body {
     animation: fadeIn 0.5s ease;
 }
 
-/* Спеціальні класи */
 .hidden {
     display: none;
 }
@@ -426,4 +415,55 @@ body {
     border-radius: 10px;
     text-align: center;
     border-left: 4px solid var(--success-color);
+}
+
+.info-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid var(--accent-color);
+    margin-bottom: 15px;
+}
+
+.info-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.info-card ul {
+    margin-left: 20px;
+}
+
+.info-card li {
+    margin-bottom: 5px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: var(--secondary-color);
+}
+
+.btn.primary {
+    background: var(--primary-color);
+}
+
+.btn.primary:hover {
+    background: var(--secondary-color);
+}
+
+.action-buttons {
+    margin-top: 20px;
+    text-align: center;
 }
