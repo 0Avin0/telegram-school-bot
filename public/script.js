@@ -369,4 +369,121 @@ function openInfoModal() {
         <div class="modal-header">
             <h2>📋 Інформація</h2>
             <button class="close-button">&times;</button>
-       
+               </div>
+        <div class="modal-content">
+            <div class="info-card">
+                <h3>ℹ️ Про Study Bot</h3>
+                <p>Навчальний помічник для учнів та вчителів</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>📞 Екстрені служби</h3>
+                <ul>
+                    <li>🚒 101 - Пожежна служба</li>
+                    <li>🚓 102 - Поліція</li>
+                    <li>🚑 103 - Швидка допомога</li>
+                    <li>⚠️ 104 - Газова служба</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>📚 Доступні функції</h3>
+                <ul>
+                    <li>📅 Розклад занять для 5-9 класів</li>
+                    <li>📖 Онлайн підручники 8 класу</li>
+                    <li>🔔 Розклад дзвінків та перерв</li>
+                    <li>🎲 Випадковий учень (для вчителів)</li>
+                    <li>👥 Управління класами та учнями</li>
+                </ul>
+            </div>
+        </div>
+    `;
+    
+    showModal(modalContent, 'info-modal');
+}
+
+// Відкрити Telegram бота
+function openTelegram() {
+    // Відкриваємо бота @random_childbot
+    const telegramUrl = 'tg://resolve?domain=random_childbot';
+    window.open(telegramUrl, '_blank');
+    
+    // Резервний вариант через веб-версію
+    setTimeout(() => {
+        window.location.href = 'https://t.me/random_childbot';
+    }, 500);
+    
+    if (currentModal) {
+        closeModal();
+    }
+}
+
+// Показати модальне вікно
+function showModal(content, modalId) {
+    // Закриваємо попереднє модальне вікно, якщо воно є
+    if (currentModal) {
+        closeModal();
+    }
+    
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    modalOverlay.id = modalId;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = content;
+    
+    modalOverlay.appendChild(modal);
+    document.body.appendChild(modalOverlay);
+    
+    // Додаємо обробник закриття
+    const closeButton = modal.querySelector('.close-button');
+    if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
+    }
+    
+    // Додаємо обробник кліку на оверлей
+    modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+    
+    // Показуємо модальне вікно
+    setTimeout(() => {
+        modalOverlay.classList.add('active');
+    }, 10);
+    
+    currentModal = modalOverlay;
+}
+
+// Закрити модальне вікно
+function closeModal() {
+    if (currentModal) {
+        currentModal.classList.remove('active');
+        setTimeout(() => {
+            if (currentModal && currentModal.parentNode) {
+                currentModal.parentNode.removeChild(currentModal);
+            }
+            currentModal = null;
+        }, 300);
+    }
+}
+
+// Ініціалізація додатку при завантаженні
+document.addEventListener('DOMContentLoaded', initApp);
+
+// Обробка посилань
+document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes(window.location.hostname)) {
+        e.preventDefault();
+        window.open(e.target.href, '_blank');
+    }
+});
+
+// Закриття по ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && currentModal) {
+        closeModal();
+    }
+});
