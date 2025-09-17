@@ -405,4 +405,65 @@ body {
         margin: 10px;
         width: calc(100% - 20px);
     }
+/* Стилі для списку міністрів */
+.ministry-list {
+    margin-top: 15px;
+}
+
+.ministry-item {
+    background-color: var(--card-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.ministry-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.ministry-icon {
+    font-size: 1.5rem;
+    min-width: 40px;
+    text-align: center;
+}
+
+.ministry-info h4 {
+    color: var(--primary-color);
+    margin-bottom: 4px;
+    font-size: 1rem;
+}
+
+.ministry-students {
+    color: var(--secondary-color);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.ministry-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    padding-left: 52px;
+}
+
+/* Адаптивність для міністрів */
+@media (max-width: 480px) {
+    .ministry-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .ministry-description {
+        padding-left: 0;
+    }
+    
+    .ministry-icon {
+        align-self: flex-start;
+    }
+}
 }
