@@ -1,7 +1,5 @@
 // Ініціалізація Telegram WebApp
 let tg = window.Telegram.WebApp;
-tg.expand();
-tg.enableClosingConfirmation();
 
 // Елементи DOM
 const userNameElement = document.getElementById('user-name');
@@ -170,6 +168,9 @@ function initApp() {
     }
     
     // Якщо доступ дозволено - продовжуємо
+    tg.expand();
+    tg.enableClosingConfirmation();
+    
     userNameElement.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Учень 8 класу';
     if (user.photo_url) {
         userPhotoMainElement.src = user.photo_url;
@@ -186,6 +187,7 @@ function initApp() {
 
 // Відкриття функціоналу за карткою
 function openFeature(feature) {
+    console.log('Opening feature:', feature);
     switch(feature) {
         case 'schedule':
             openScheduleModal();
@@ -202,6 +204,8 @@ function openFeature(feature) {
         case 'info':
             openInfoModal();
             break;
+        default:
+            console.log('Unknown feature:', feature);
     }
 }
 
@@ -229,15 +233,23 @@ function openScheduleModal() {
     showModal(modalContent, 'schedule-modal');
     
     // Додаємо обробники подій
-    document.querySelectorAll('.day-button').forEach(button => {
-        button.addEventListener('click', function() {
-            document.querySelectorAll('.day-button').forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            const day = this.getAttribute('data-day');
-            document.getElementById('schedule-display').innerHTML = renderScheduleTable('8', day);
-        });
-    });
+    setTimeout(() => {
+        const dayButtons = document.querySelectorAll('.day-button');
+        if (dayButtons.length > 0) {
+            dayButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.day-button').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const day = this.getAttribute('data-day');
+                    const scheduleDisplay = document.getElementById('schedule-display');
+                    if (scheduleDisplay) {
+                        scheduleDisplay.innerHTML = renderScheduleTable('8', day);
+                    }
+                });
+            });
+        }
+    }, 100);
 }
 
 // Генерація таблиці розкладу
@@ -291,7 +303,7 @@ function openBooksModal() {
                 <h3>Підручники 8 класу</h3>
                 <p>Доступні електронні версії підручників:</p>
             </div>
-            <div class="books-list" id="books-list">
+            <div class="books-list">
                 ${renderBooksList()}
             </div>
         </div>
