@@ -1,3 +1,13 @@
+// Ініціалізація Telegram WebApp
+let tg = window.Telegram.WebApp;
+tg.expand();
+tg.enableClosingConfirmation();
+
+// Елементи DOM
+const userNameElement = document.getElementById('user-name');
+const userPhotoMainElement = document.getElementById('user-photo-main');
+const appContainer = document.querySelector('.app-container');
+
 // Список дозволених користувачів (ID) - ЗАМІНИТИ НА РЕАЛЬНІ ID
 const ALLOWED_USERS = [
  8147168546, // Назар Кузьмич
@@ -7,136 +17,59 @@ const ALLOWED_USERS = [
  1924433301 // Саша Ткач
 ];
 
-// Перевірка чи це Telegram WebApp
-function isTelegramWebApp() {
-    return typeof window.Telegram !== 'undefined' && 
-           window.Telegram.WebApp && 
-           window.Telegram.WebApp.initDataUnsafe &&
-           window.Telegram.WebApp.initDataUnsafe.user;
-}
-
-// Перевірка доступу користувача
-function isUserAllowed(userId) {
+// Перевірка доступу
+function checkAccess(userId) {
     return ALLOWED_USERS.includes(userId);
 }
 
 // Блокування доступу
-function blockAccess(message = "Доступ заборонено") {
-    document.body.innerHTML = `
+function blockAccess() {
+    appContainer.innerHTML = `
         <div class="access-denied">
             <div class="denied-content">
                 <div class="denied-icon">⛔</div>
-                <h2>${message}</h2>
-                <p>Цей додаток доступний виключно для учнів 8 класу через Telegram.</p>
-                <p>Відкрийте бота @random_childbot та виберіть опцію "Web App".</p>
-                <div class="telegram-info">
-                    <p>📱 <strong>Як відкрити:</strong></p>
-                    <ol>
-                        <li>Знайдіть бота @random_childbot в Telegram</li>
-                        <li>Натисніть кнопку "Web App" або "Відкрити додаток"</li>
-                        <li>Якщо кнопки немає - напишіть /start боту</li>
-                    </ol>
-                </div>
-                <div class="contact-info">
-                    <p>📞 Для отримання доступу зверніться до класного керівника</p>
-                </div>
+                <h2>Доступ заборонено</h2>
+                <p>Ви не маєте дозволу на використання цього додатку.</p>
+                <p>Зверніться до адміністратора для отримання доступу.</p>
             </div>
         </div>
     `;
 }
 
-// Стилі для блокування
+// Стилі для блокування доступу
 const blockStyles = `
     .access-denied {
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-color: #f8f9fa;
         padding: 20px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     
     .denied-content {
         text-align: center;
         background: white;
         padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        max-width: 500px;
-        width: 90%;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
     }
     
     .denied-icon {
-        font-size: 5rem;
+        font-size: 4rem;
         margin-bottom: 20px;
-        color: #dc3545;
     }
     
     .denied-content h2 {
         color: #dc3545;
         margin-bottom: 15px;
-        font-size: 1.8rem;
     }
     
     .denied-content p {
         color: #6c757d;
-        margin-bottom: 15px;
-        font-size: 1.1rem;
-        line-height: 1.5;
-    }
-    
-    .telegram-info {
-        background: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-        margin: 20px 0;
-        text-align: left;
-    }
-    
-    .telegram-info p {
-        color: #495057;
         margin-bottom: 10px;
-    }
-    
-    .telegram-info ol {
-        color: #495057;
-        padding-left: 20px;
-        margin: 0;
-    }
-    
-    .telegram-info li {
-        margin-bottom: 8px;
-        line-height: 1.4;
-    }
-    
-    .contact-info {
-        border-top: 1px solid #dee2e6;
-        padding-top: 20px;
-        margin-top: 20px;
-    }
-    
-    .contact-info p {
-        color: #28a745;
-        font-weight: 500;
-    }
-    
-    @media (max-width: 480px) {
-        .denied-content {
-            padding: 20px;
-        }
-        
-        .denied-icon {
-            font-size: 4rem;
-        }
-        
-        .denied-content h2 {
-            font-size: 1.5rem;
-        }
-        
-        .denied-content p {
-            font-size: 1rem;
-        }
     }
 `;
 
@@ -144,55 +77,6 @@ const blockStyles = `
 const styleSheet = document.createElement('style');
 styleSheet.textContent = blockStyles;
 document.head.appendChild(styleSheet);
-
-// Головна перевірка при завантаженні
-document.addEventListener('DOMContentLoaded', function() {
-    if (!isTelegramWebApp()) {
-        blockAccess("Доступ заборонено");
-        return;
-    }
-    
-    // Якщо це Telegram - перевіряємо ID користувача
-    const user = window.Telegram.WebApp.initDataUnsafe.user;
-    if (!user || !isUserAllowed(user.id)) {
-        blockAccess("Доступ заборонено. Ваш ID не в списку дозволених.");
-        return;
-    }
-    
-    // Якщо все OK - запускаємо додаток
-    initTelegramApp();
-});
-
-// Ініціалізація додатку для Telegram
-function initTelegramApp() {
-    let tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.enableClosingConfirmation();
-
-    // Елементи DOM
-    const userNameElement = document.getElementById('user-name');
-    const userPhotoMainElement = document.getElementById('user-photo-main');
-
-    // Отримуємо дані користувача з Telegram
-    const user = tg.initDataUnsafe.user;
-    
-    if (user) {
-        userNameElement.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Учень 8 класу';
-        if (user.photo_url) {
-            userPhotoMainElement.src = user.photo_url;
-        }
-    }
-    
-    // Додаємо обробники подій для карток
-    document.querySelectorAll('.nav-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const feature = card.getAttribute('data-feature');
-            openFeature(feature);
-        });
-    });
-}
-
-// ========== ФУНКЦІОНАЛ ДОДАТКУ ==========
 
 // Поточний активний модальний
 let currentModal = null;
@@ -275,17 +159,53 @@ const MINISTRY_DESCRIPTIONS = {
     "❤️ Міністерство добрих справ і дружби": "організовує допомогу молодшим учням; бере участь у благодійних акціях; пропагує доброту і взаємопідтримку; допомагає уникати конфліктів; організує «дні дружби»; підтримує добру атмосферу в класі."
 };
 
-// Функції додатку (залишаються без змін)
+// Ініціалізація додатку
+function initApp() {
+    // Отримуємо дані користувача з Telegram
+    const user = tg.initDataUnsafe.user;
+    
+    if (!user || !checkAccess(user.id)) {
+        blockAccess();
+        return;
+    }
+    
+    // Якщо доступ дозволено - продовжуємо
+    userNameElement.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Учень 8 класу';
+    if (user.photo_url) {
+        userPhotoMainElement.src = user.photo_url;
+    }
+    
+    // Додаємо обробники подій для карток
+    document.querySelectorAll('.nav-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const feature = card.getAttribute('data-feature');
+            openFeature(feature);
+        });
+    });
+}
+
+// Відкриття функціоналу за карткою
 function openFeature(feature) {
     switch(feature) {
-        case 'schedule': openScheduleModal(); break;
-        case 'books': openBooksModal(); break;
-        case 'bells': openBellsModal(); break;
-        case 'ministry': openMinistryModal(); break;
-        case 'info': openInfoModal(); break;
+        case 'schedule':
+            openScheduleModal();
+            break;
+        case 'books':
+            openBooksModal();
+            break;
+        case 'bells':
+            openBellsModal();
+            break;
+        case 'ministry':
+            openMinistryModal();
+            break;
+        case 'info':
+            openInfoModal();
+            break;
     }
 }
 
+// Модальне вікно розкладу
 function openScheduleModal() {
     const modalContent = `
         <div class="modal-header">
@@ -308,16 +228,19 @@ function openScheduleModal() {
     
     showModal(modalContent, 'schedule-modal');
     
+    // Додаємо обробники подій
     document.querySelectorAll('.day-button').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelectorAll('.day-button').forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
+            
             const day = this.getAttribute('data-day');
             document.getElementById('schedule-display').innerHTML = renderScheduleTable('8', day);
         });
     });
 }
 
+// Генерація таблиці розкладу
 function renderScheduleTable(selectedClass, day) {
     const lessons = rozklad[selectedClass] && rozklad[selectedClass][day];
     
@@ -330,18 +253,33 @@ function renderScheduleTable(selectedClass, day) {
             <h3>8 клас - ${day}</h3>
         </div>
         <table class="schedule-table">
-            <thead><tr><th>№</th><th>Предмет</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Предмет</th>
+                </tr>
+            </thead>
             <tbody>
     `;
     
     lessons.forEach((lesson, index) => {
-        tableHtml += `<tr><td><strong>${index + 1}</strong></td><td>${lesson}</td></tr>`;
+        tableHtml += `
+            <tr>
+                <td><strong>${index + 1}</strong></td>
+                <td>${lesson}</td>
+            </tr>
+        `;
     });
     
-    tableHtml += `</tbody></table>`;
+    tableHtml += `
+            </tbody>
+        </table>
+    `;
+    
     return tableHtml;
 }
 
+// Модальне вікно підручників
 function openBooksModal() {
     const modalContent = `
         <div class="modal-header">
@@ -353,15 +291,19 @@ function openBooksModal() {
                 <h3>Підручники 8 класу</h3>
                 <p>Доступні електронні версії підручників:</p>
             </div>
-            <div class="books-list">${renderBooksList()}</div>
+            <div class="books-list" id="books-list">
+                ${renderBooksList()}
+            </div>
         </div>
     `;
     
     showModal(modalContent, 'books-modal');
 }
 
+// Генерація списку книг
 function renderBooksList() {
     let listHtml = `<ul class="book-list">`;
+    
     for (const [subject, url] of Object.entries(ebooks_8)) {
         listHtml += `
             <li class="book-item">
@@ -370,10 +312,12 @@ function renderBooksList() {
             </li>
         `;
     }
+    
     listHtml += `</ul>`;
     return listHtml;
 }
 
+// Модальне вікно розкладу дзвінків
 function openBellsModal() {
     const modalContent = `
         <div class="modal-header">
@@ -385,7 +329,9 @@ function openBellsModal() {
                 <h3>Розклад уроків та перерв</h3>
                 <p>Час проведення занять:</p>
             </div>
-            <div class="bells-list">${renderBellsList()}</div>
+            <div class="bells-list">
+                ${renderBellsList()}
+            </div>
             <div class="info-card">
                 <p><strong>⏰ Загальна тривалість навчального дня:</strong> 6:50 год</p>
             </div>
@@ -395,8 +341,10 @@ function openBellsModal() {
     showModal(modalContent, 'bells-modal');
 }
 
+// Генерація списку дзвінків
 function renderBellsList() {
     let listHtml = '';
+    
     ROZKLAD_BELLS.forEach(([lesson, time]) => {
         const isBreak = lesson.includes('перерва');
         listHtml += `
@@ -409,9 +357,11 @@ function renderBellsList() {
             </div>
         `;
     });
+    
     return listHtml;
 }
 
+// Модальне вікно міністрів класу
 function openMinistryModal() {
     const modalContent = `
         <div class="modal-header">
@@ -423,15 +373,19 @@ function openMinistryModal() {
                 <h3>🏛 Пам'ятка для міністрів 8 класу</h3>
                 <p>Структура класного самоврядування:</p>
             </div>
-            <div class="ministry-list">${renderMinistryList()}</div>
+            <div class="ministry-list">
+                ${renderMinistryList()}
+            </div>
         </div>
     `;
     
     showModal(modalContent, 'ministry-modal');
 }
 
+// Генерація списку міністрів
 function renderMinistryList() {
     let listHtml = '';
+    
     for (const [position, students] of Object.entries(MINISTRY_8_CLASS)) {
         listHtml += `
             <div class="ministry-item">
@@ -446,9 +400,11 @@ function renderMinistryList() {
             </div>
         `;
     }
+    
     return listHtml;
 }
 
+// Модальне вікно інформації
 function openInfoModal() {
     const modalContent = `
         <div class="modal-header">
@@ -460,6 +416,7 @@ function openInfoModal() {
                 <h3>ℹ️ Про Study Bot</h3>
                 <p>Навчальний помічник для учнів 8 класу</p>
             </div>
+            
             <div class="info-card">
                 <h3>📞 Екстрені служби</h3>
                 <ul>
@@ -469,6 +426,7 @@ function openInfoModal() {
                     <li>⚠️ 104 - Газова служба</li>
                 </ul>
             </div>
+            
             <div class="info-card">
                 <h3>📚 Доступні функції</h3>
                 <ul>
@@ -484,8 +442,11 @@ function openInfoModal() {
     showModal(modalContent, 'info-modal');
 }
 
+// Показати модальне вікно
 function showModal(content, modalId) {
-    if (currentModal) closeModal();
+    if (currentModal) {
+        closeModal();
+    }
     
     const modalOverlay = document.createElement('div');
     modalOverlay.className = 'modal-overlay';
@@ -499,16 +460,24 @@ function showModal(content, modalId) {
     document.body.appendChild(modalOverlay);
     
     const closeButton = modal.querySelector('.close-button');
-    if (closeButton) closeButton.addEventListener('click', closeModal);
+    if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
+    }
     
     modalOverlay.addEventListener('click', function(e) {
-        if (e.target === modalOverlay) closeModal();
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
     });
     
-    setTimeout(() => modalOverlay.classList.add('active'), 10);
+    setTimeout(() => {
+        modalOverlay.classList.add('active');
+    }, 10);
+    
     currentModal = modalOverlay;
 }
 
+// Закрити модальне вікно
 function closeModal() {
     if (currentModal) {
         currentModal.classList.remove('active');
@@ -531,5 +500,10 @@ document.addEventListener('click', function(e) {
 
 // Закриття по ESC
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && currentModal) closeModal();
+    if (e.key === 'Escape' && currentModal) {
+        closeModal();
+    }
 });
+
+// Ініціалізація додатку при завантаженні
+document.addEventListener('DOMContentLoaded', initApp);
