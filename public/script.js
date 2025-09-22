@@ -10,7 +10,8 @@ const appContainer = document.querySelector('.app-container');
 
 // Список дозволених користувачів (ID) - ЗАМІНИТИ НА РЕАЛЬНІ ID
 const ALLOWED_USERS = [
- 8147168546
+ 8147168546, // Назар Кузьмич
+ 6329096147 // Аліна Ткач
 ];
 
 // Перевірка доступу
