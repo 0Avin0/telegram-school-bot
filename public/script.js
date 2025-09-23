@@ -1,37 +1,28 @@
 // Ініціалізація Telegram WebApp
-let tg = window.Telegram.WebApp;
+const tg = window.Telegram.WebApp;
 
 // Елементи DOM
-const userNameElement = document.getElementById('user-name');
-const userPhotoMainElement = document.getElementById('user-photo-main');
-const appContainer = document.querySelector('.app-container');
-const modalOverlay = document.getElementById('modal-overlay');
-const modalTitle = document.getElementById('modal-title');
-const modalContent = document.getElementById('modal-content');
-const closeButton = document.querySelector('.close-button');
+const elements = {
+    userName: document.getElementById('user-name'),
+    userPhoto: document.getElementById('user-photo-main'),
+    appContainer: document.querySelector('.app-container'),
+    modalOverlay: document.getElementById('modal-overlay'),
+    modalTitle: document.getElementById('modal-title'),
+    modalContent: document.getElementById('modal-content'),
+    closeButton: document.querySelector('.close-button')
+};
 
-// Список дозволених користувачів (ID)
-const ALLOWED_USERS = [
-    8147168546, // Назар Кузьмич
-    6329096147, // Аліна Ткач
-    5836950765, // Діма Яриш
-    7745185733, // Марго Коваленко
-    1924433301 // Саша Ткач
-];
-
-// Дані для додатка
+// Дані додатка
 const APP_DATA = {
     rozklad: {
-        "8": {
-            "Понеділок": ["Історія України", "Підприємство і Фінансова грамотність", "Українська мова", "Алгебра", "Мистецтво", "Українська література", "Фізика"],
-            "Вівторок": ["Фізична культура", "Географія", "Зарубіжна література", "Німецька мова", "Геометрія", "Інформатика / англ. мова", "Англ. мова / інформатика"],
-            "Середа": ["Хімія", "Всесвітня історія", "Українська мова", "Біологія", "Алгебра", "Фізика", "Фізична культура"],
-            "Четвер": ["Геометрія", "Англійська мова", "Німецька мова", "Українська література", "Географія", "Алгебра", "Біологія", "Фізична культура"],
-            "П'ятниця": ["Українська мова", "Історія України", "Хімія", "Інформатика / англ. мова", "Англ.мова/інформатика", "Технології", "Здоров'я, безпека"]
-        }
+        "Понеділок": ["Історія України", "Підприємство і Фінансова грамотність", "Українська мова", "Алгебра", "Мистецтво", "Українська література", "Фізика"],
+        "Вівторок": ["Фізична культура", "Географія", "Зарубіжна література", "Німецька мова", "Геометрія", "Інформатика / англ. мова", "Англ. мова / інформатика"],
+        "Середа": ["Хімія", "Всесвітня історія", "Українська мова", "Біологія", "Алгебра", "Фізика", "Фізична культура"],
+        "Четвер": ["Геометрія", "Англійська мова", "Німецька мова", "Українська література", "Географія", "Алгебра", "Біологія", "Фізична культура"],
+        "П'ятниця": ["Українська мова", "Історія України", "Хімія", "Інформатика / англ. мова", "Англ.мова/інформатика", "Технології", "Здоров'я, безпека"]
     },
     
-    ebooks_8: {
+    ebooks: {
         "Інформатика": "https://pidruchnyk.com.ua/3011-informatyka-ryvkind-8-klas-2025.html",
         "Геометрія": "https://pidruchnyk.com.ua/2915-geometriia-burda-8-klas-2025.html",
         "Англійська мова": "https://pidruchnyk.com.ua/2896-angliiska-mova-mitchell-8-klas.html",
@@ -73,382 +64,223 @@ const APP_DATA = {
     ],
     
     ministry: {
-        "👑 Президент класу": {
-            students: ["Мілана Баляс"],
-            description: "очолює класне самоврядування; представляє клас на зборах; координує роботу міністрів."
-        },
-        "⭐ Віце-президент": {
-            students: ["Аріна Кухаренко", "Софія Заболотня"],
-            description: "допомагає президенту; замінює його у разі відсутності; контролює виконання доручень."
-        },
-        "🏦 Депутат": {
-            students: ["Маргарита Даниленко"],
-            description: "організовує і керує міністрами; координує роботу всіх міністерств."
-        },
-        "📚 Міністерство освіти та науки": {
-            students: ["Станіслав Гусєв", "Максим Вашека"],
-            description: "організовує допомогу у навчанні; нагадує про домашні завдання; проводить міні-вікторини та брейн-ринги."
-        },
-        "🎭 Міністерство культури та дозвілля": {
-            students: ["Олександр Ткач"],
-            description: "організовує свята, конкурси, квести; готує клас до виступів і свят школи; підтримує традиції класу."
-        },
-        "⚽ Міністерство спорту та здоров'я": {
-            students: ["Злата Мелещенко"],
-            description: "відповідає за спортивні турніри; організовує руханки та «дні здоров'я»; мотивує вести активний спосіб життя."
-        },
-        "🌍 Міністерство екології та порядку": {
-            students: ["Анастасія Коваль"],
-            description: "стежить за чистотою класу; організовує чергування; проводить еко-акції, озеленення."
-        },
-        "📸 Міністерство медіа та комунікацій": {
-            students: ["Марія Мовчан"],
-            description: "робить фото і відео з життя класу; оформлює стенди, оголошення; веде щоденник подій класу."
-        },
-        "💡 Міністерство креативних ідей": {
-            students: ["Ліна Ільченко"],
-            description: "пропонує нові цікаві заходи; допомагає робити уроки й події яскравими; вносить «родзинку» у класне життя."
-        },
-        "❤️ Міністерство добрих справ і дружби": {
-            students: ["Маргарита Гриценко"],
-            description: "організовує допомогу молодшим учням; бере участь у благодійних акціях; пропагує доброту і взаємопідтримку; допомагає уникати конфліктів; організує «дні дружби»; підтримує добру атмосферу в класі."
-        }
+        "👑 Президент класу": ["Мілана Баляс"],
+        "⭐ Віце-президент": ["Аріна Кухаренко", "Софія Заболотня"],
+        "🏦 Депутат": ["Маргарита Даниленко"],
+        "📚 Міністерство освіти та науки": ["Станіслав Гусєв", "Максим Вашека"],
+        "🎭 Міністерство культури та дозвілля": ["Олександр Ткач"],
+        "⚽ Міністерство спорту та здоров'я": ["Злата Мелещенко"],
+        "🌍 Міністерство екології та порядку": ["Анастасія Коваль"],
+        "📸 Міністерство медіа та комунікацій": ["Марія Мовчан"],
+        "💡 Міністерство креативних ідей": ["Ліна Ільченко"],
+        "❤️ Міністерство добрих справ і дружби": ["Маргарита Гриценко"]
     }
 };
 
-// Перевірка доступу
-function checkAccess(userId) {
-    return ALLOWED_USERS.includes(userId);
-}
-
-// Блокування доступу
-function blockAccess() {
-    appContainer.innerHTML = `
-        <div class="access-denied">
-            <div class="denied-content">
-                <div class="denied-icon">⛔</div>
-                <h2>Доступ заборонено</h2>
-                <p>Ви не маєте дозволу на використання цього додатку.</p>
-                <p>Зверніться до адміністратора для отримання доступу.</p>
-            </div>
-        </div>
-    `;
-}
-
-// Ініціалізація додатку
-function initApp() {
-    console.log('🔧 Ініціалізація додатка...');
+// Утиліти
+const utils = {
+    showModal: () => {
+        elements.modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    },
     
-    // Отримуємо дані користувача з Telegram
-    const user = tg.initDataUnsafe?.user;
+    closeModal: () => {
+        elements.modalOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    },
     
-    if (!user || !checkAccess(user.id)) {
-        console.log('🚫 Доступ заборонено для користувача:', user?.id);
-        blockAccess();
-        return;
+    createElement: (tag, classes, content) => {
+        const el = document.createElement(tag);
+        if (classes) el.className = classes;
+        if (content) el.innerHTML = content;
+        return el;
     }
-    
-    console.log('✅ Доступ дозволено для:', user.id);
-    
-    // Якщо доступ дозволено - продовжуємо
-    tg.expand();
-    tg.enableClosingConfirmation();
-    
-    // Оновлюємо інформацію про користувача
-    userNameElement.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Учень 8 класу';
-    if (user.photo_url) {
-        userPhotoMainElement.src = user.photo_url;
-    }
-    
-    // Додаємо обробники подій для карток
-    initEventListeners();
-    
-    console.log('✅ Додаток успішно ініціалізовано');
-}
+};
 
-// Ініціалізація обробників подій
-function initEventListeners() {
-    console.log('🔧 Додавання обробників подій...');
-    
-    const navCards = document.querySelectorAll('.nav-card');
-    console.log('📋 Знайдено карток:', navCards.length);
-    
-    navCards.forEach((card, index) => {
-        card.addEventListener('click', function() {
-            const feature = this.getAttribute('data-feature');
-            console.log('🖱️ Клік по картці:', feature);
-            openFeature(feature);
-        });
+// Обробники функціоналу
+const features = {
+    schedule: () => {
+        elements.modalTitle.textContent = '📅 Розклад занять';
         
-        // Додаємо ефект натискання
-        card.style.cursor = 'pointer';
-        card.addEventListener('mousedown', function() {
-            this.style.transform = 'scale(0.95)';
-        });
-        card.addEventListener('mouseup', function() {
-            this.style.transform = 'scale(1)';
-        });
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
-        });
-    });
-    
-    // Обробник закриття модального вікна
-    closeButton.addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', function(e) {
-        if (e.target === modalOverlay) {
-            closeModal();
-        }
-    });
-    
-    // Закриття по ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
-    });
-    
-    console.log('✅ Обробники подій додані');
-}
-
-// Відкриття функціоналу за карткою
-function openFeature(feature) {
-    console.log('🚀 Відкриття функції:', feature);
-    
-    switch(feature) {
-        case 'schedule':
-            openScheduleModal();
-            break;
-        case 'books':
-            openBooksModal();
-            break;
-        case 'bells':
-            openBellsModal();
-            break;
-        case 'ministry':
-            openMinistryModal();
-            break;
-        case 'info':
-            openInfoModal();
-            break;
-        default:
-            console.log('❌ Невідома функція:', feature);
-    }
-}
-
-// Модальне вікно розкладу
-function openScheduleModal() {
-    modalTitle.textContent = '📅 Розклад занять 8 класу';
-    
-    const days = ["Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця"];
-    let content = `
-        <div class="day-buttons" id="day-buttons">
-            ${days.map(day => `<button class="day-button" data-day="${day}">${day}</button>`).join('')}
-        </div>
-        <div class="schedule-display" id="schedule-display">
-            ${renderScheduleTable('Понеділок')}
-        </div>
-    `;
-    
-    modalContent.innerHTML = content;
-    showModal();
-    
-    // Додаємо обробники для кнопок днів
-    setTimeout(() => {
-        const dayButtons = document.querySelectorAll('.day-button');
-        dayButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Видаляємо активний клас з усіх кнопок
-                dayButtons.forEach(btn => btn.classList.remove('active'));
-                // Додаємо активний клас поточній кнопці
-                this.classList.add('active');
-                
-                const day = this.getAttribute('data-day');
-                const scheduleDisplay = document.getElementById('schedule-display');
-                scheduleDisplay.innerHTML = renderScheduleTable(day);
+        const days = Object.keys(APP_DATA.rozklad);
+        const dayButtons = days.map(day => 
+            `<button class="day-button" data-day="${day}">${day}</button>`
+        ).join('');
+        
+        elements.modalContent.innerHTML = `
+            <div class="day-buttons">${dayButtons}</div>
+            <div id="schedule-display">${renderSchedule(days[0])}</div>
+        `;
+        
+        utils.showModal();
+        
+        // Обробники кнопок днів
+        setTimeout(() => {
+            document.querySelectorAll('.day-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.day-button').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    document.getElementById('schedule-display').innerHTML = 
+                        renderSchedule(e.target.dataset.day);
+                });
             });
-        });
-        
-        // Активуємо першу кнопку
-        if (dayButtons.length > 0) {
-            dayButtons[0].classList.add('active');
-        }
-    }, 100);
-}
-
-// Генерація таблиці розкладу
-function renderScheduleTable(day) {
-    const lessons = APP_DATA.rozklad["8"][day];
+            document.querySelector('.day-button').classList.add('active');
+        }, 50);
+    },
     
-    if (!lessons || lessons.length === 0) {
-        return `<div class="info-card"><p>На ${day.toLowerCase()} у 8 класі занять немає.</p></div>`;
+    books: () => {
+        elements.modalTitle.textContent = '📚 Підручники';
+        
+        const booksList = Object.entries(APP_DATA.ebooks).map(([subject, url]) => `
+            <div class="book-item">
+                <a href="${url}" target="_blank" class="book-link">
+                    <span class="card-icon">📚</span>
+                    <span>${subject}</span>
+                    <span style="margin-left: auto;">↗</span>
+                </a>
+            </div>
+        `).join('');
+        
+        elements.modalContent.innerHTML = `
+            <div class="info-card">
+                <h3>Електронні підручники 8 класу</h3>
+                <p>Натисніть на предмет для перегляду</p>
+            </div>
+            <div class="book-list">${booksList}</div>
+        `;
+        
+        utils.showModal();
+    },
+    
+    bells: () => {
+        elements.modalTitle.textContent = '🔔 Розклад дзвінків';
+        
+        const bellsList = APP_DATA.bells.map(([lesson, time]) => `
+            <div class="bell-item">
+                <div class="bell-info">
+                    <span>${lesson.includes('перерва') ? '🔄' : '📚'}</span>
+                    <span>${lesson}</span>
+                </div>
+                <span>${time}</span>
+            </div>
+        `).join('');
+        
+        elements.modalContent.innerHTML = `
+            <div class="info-card">
+                <h3>Розклад уроків та перерв</h3>
+            </div>
+            <div class="bells-list">${bellsList}</div>
+            <div class="info-card">
+                <p><strong>⏰ Тривалість навчального дня:</strong> 6:50 год</p>
+            </div>
+        `;
+        
+        utils.showModal();
+    },
+    
+    ministry: () => {
+        elements.modalTitle.textContent = '👥 Міністри класу';
+        
+        const ministryList = Object.entries(APP_DATA.ministry).map(([position, students]) => `
+            <div class="ministry-item">
+                <div class="ministry-header">
+                    <span>${position.split(' ')[0]}</span>
+                    <div>
+                        <h4>${position}</h4>
+                        <p class="ministry-students">${students.join(', ')}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        elements.modalContent.innerHTML = `
+            <div class="info-card">
+                <h3>Структура самоврядування 8 класу</h3>
+            </div>
+            <div class="ministry-list">${ministryList}</div>
+        `;
+        
+        utils.showModal();
+    },
+    
+    info: () => {
+        elements.modalTitle.textContent = '📋 Інформація';
+        
+        elements.modalContent.innerHTML = `
+            <div class="info-card">
+                <h3>Study Bot</h3>
+                <p>Навчальний помічник для 8 класу</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>📞 Екстрені служби</h3>
+                <p>101 - Пожежна<br>102 - Поліція<br>103 - Швидка<br>104 - Газова</p>
+            </div>
+        `;
+        
+        utils.showModal();
     }
+};
+
+// Допоміжні функції
+function renderSchedule(day) {
+    const lessons = APP_DATA.rozklad[day];
+    if (!lessons) return '<p>Розклад не знайдено</p>';
     
     return `
-        <div class="schedule-header">
-            <h3>8 клас - ${day}</h3>
+        <div class="info-card">
+            <h3>${day}</h3>
         </div>
         <table class="schedule-table">
             <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Предмет</th>
-                </tr>
+                <tr><th>№</th><th>Предмет</th></tr>
             </thead>
             <tbody>
-                ${lessons.map((lesson, index) => `
-                    <tr>
-                        <td><strong>${index + 1}</strong></td>
-                        <td>${lesson}</td>
-                    </tr>
+                ${lessons.map((lesson, i) => `
+                    <tr><td>${i+1}</td><td>${lesson}</td></tr>
                 `).join('')}
             </tbody>
         </table>
     `;
 }
 
-// Модальне вікно підручників
-function openBooksModal() {
-    modalTitle.textContent = '📚 Онлайн підручники 8 класу';
+// Ініціалізація
+function initApp() {
+    // Ініціалізація Telegram WebApp
+    tg.expand();
+    tg.enableClosingConfirmation();
     
-    const booksList = Object.entries(APP_DATA.ebooks_8).map(([subject, url]) => `
-        <li class="book-item">
-            <span class="book-icon">📚</span>
-            <a href="${url}" target="_blank" class="book-link">${subject} <span class="external-icon">↗</span></a>
-        </li>
-    `).join('');
-    
-    modalContent.innerHTML = `
-        <div class="info-card">
-            <h3>Підручники 8 класу</h3>
-            <p>Доступні електронні версії підручників:</p>
-        </div>
-        <ul class="book-list">${booksList}</ul>
-    `;
-    
-    showModal();
-}
-
-// Модальне вікно розкладу дзвінків
-function openBellsModal() {
-    modalTitle.textContent = '🔔 Розклад дзвінків';
-    
-    const bellsList = APP_DATA.bells.map(([lesson, time]) => {
-        const isBreak = lesson.includes('перерва');
-        return `
-            <div class="bell-item">
-                <div class="bell-info">
-                    <span class="bell-icon">${isBreak ? '🔄' : '📚'}</span>
-                    <span>${lesson}</span>
-                </div>
-                <span class="bell-time">${time}</span>
-            </div>
-        `;
-    }).join('');
-    
-    modalContent.innerHTML = `
-        <div class="info-card">
-            <h3>Розклад уроків та перерв</h3>
-            <p>Час проведення занять:</p>
-        </div>
-        <div class="bells-list">${bellsList}</div>
-        <div class="info-card">
-            <p><strong>⏰ Загальна тривалість навчального дня:</strong> 6:50 год</p>
-        </div>
-    `;
-    
-    showModal();
-}
-
-// Модальне вікно міністрів класу
-function openMinistryModal() {
-    modalTitle.textContent = '👥 Міністри класу';
-    
-    const ministryList = Object.entries(APP_DATA.ministry).map(([position, data]) => `
-        <div class="ministry-item">
-            <div class="ministry-header">
-                <span class="ministry-icon">${position.split(' ')[0]}</span>
-                <div class="ministry-info">
-                    <h4>${position}</h4>
-                    <p class="ministry-students">${data.students.join(', ')}</p>
-                </div>
-            </div>
-            <p class="ministry-description">${data.description}</p>
-        </div>
-    `).join('');
-    
-    modalContent.innerHTML = `
-        <div class="info-card">
-            <h3>🏛 Пам'ятка для міністрів 8 класу</h3>
-            <p>Структура класного самоврядування:</p>
-        </div>
-        <div class="ministry-list">${ministryList}</div>
-    `;
-    
-    showModal();
-}
-
-// Модальне вікно інформації
-function openInfoModal() {
-    modalTitle.textContent = '📋 Інформація';
-    
-    modalContent.innerHTML = `
-        <div class="info-card">
-            <h3>ℹ️ Про Study Bot</h3>
-            <p>Навчальний помічник для учнів 8 класу</p>
-        </div>
-        
-        <div class="info-card">
-            <h3>📞 Екстрені служби</h3>
-            <ul>
-                <li>🚒 101 - Пожежна служба</li>
-                <li>🚓 102 - Поліція</li>
-                <li>🚑 103 - Швидка допомога</li>
-                <li>⚠️ 104 - Газова служба</li>
-            </ul>
-        </div>
-        
-        <div class="info-card">
-            <h3>📚 Доступні функції</h3>
-            <ul>
-                <li>📅 Розклад занять 8 класу</li>
-                <li>📖 Онлайн підручники 8 класу</li>
-                <li>🔔 Розклад дзвінків та перерв</li>
-                <li>👥 Міністри класу 8 класу</li>
-            </ul>
-        </div>
-    `;
-    
-    showModal();
-}
-
-// Показати модальне вікно
-function showModal() {
-    modalOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-// Закрити модальне вікно
-function closeModal() {
-    modalOverlay.classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-
-// Обробка посилань
-document.addEventListener('click', function(e) {
-    if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes(window.location.hostname)) {
-        e.preventDefault();
-        window.open(e.target.href, '_blank');
+    // Оновлення інформації користувача
+    const user = tg.initDataUnsafe?.user;
+    if (user) {
+        elements.userName.textContent = user.first_name || 'Учень';
+        if (user.photo_url) elements.userPhoto.src = user.photo_url;
     }
-});
+    
+    // Обробники кнопок
+    document.querySelectorAll('.nav-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const feature = card.dataset.feature;
+            if (features[feature]) {
+                features[feature]();
+            }
+        });
+    });
+    
+    // Обробники модального вікна
+    elements.closeButton.addEventListener('click', utils.closeModal);
+    elements.modalOverlay.addEventListener('click', (e) => {
+        if (e.target === elements.modalOverlay) utils.closeModal();
+    });
+    
+    // Обробка посилань
+    document.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A' && e.target.href) {
+            e.preventDefault();
+            window.open(e.target.href, '_blank');
+        }
+    });
+}
 
-// Ініціалізація додатку при завантаженні
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📄 DOM завантажено');
-    initApp();
-});
-
-// Обробка помилок
-window.addEventListener('error', function(e) {
-    console.error('❌ Помилка:', e.error);
-});
+// Запуск додатка
+document.addEventListener('DOMContentLoaded', initApp);
