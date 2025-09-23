@@ -1,135 +1,112 @@
 :root {
-    --primary-color: #667eea;
-    --secondary-color: #764ba2;
-    --accent-color: #f093fb;
-    --success-color: #4cd964;
-    --warning-color: #ff9500;
-    --danger-color: #ff3b30;
-    --background-color: #f8f9fa;
-    --card-color: #ffffff;
-    --text-primary: #2d3748;
-    --text-secondary: #718096;
-    --border-color: #e2e8f0;
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-    --border-radius: 16px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --bg-primary: #f8fafc;
+    --bg-card: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --radius: 12px;
+    --transition: all 0.2s ease;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-primary);
     color: var(--text-primary);
-    line-height: 1.6;
-    min-height: 100vh;
-    padding: 0;
-    margin: 0;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 
 .app-container {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: var(--background-color);
 }
 
-/* Хедер з градієнтом */
+/* Хедер */
 .app-header {
-    background: var(--gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
-    padding: 20px 16px;
-    box-shadow: var(--shadow-lg);
-    position: relative;
-    overflow: hidden;
-}
-
-.app-header::before {
-    content: '';
-    position: absolute;
+    padding: 16px;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.3;
+    z-index: 100;
+    box-shadow: var(--shadow-md);
 }
 
 .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
-    position: relative;
-    z-index: 2;
 }
 
 .header-content h1 {
-    font-size: 1.8rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .user-info {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 16px;
-    border-radius: 50px;
+    gap: 8px;
+    background: rgba(255,255,255,0.15);
+    padding: 6px 12px;
+    border-radius: 20px;
     backdrop-filter: blur(10px);
 }
 
 .user-avatar {
-    width: 44px;
-    height: 44px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    box-shadow: var(--shadow-sm);
+    border: 2px solid rgba(255,255,255,0.3);
 }
 
 /* Основний контент */
 .app-main {
     flex: 1;
-    padding: 24px 16px;
-    max-width: 1200px;
+    padding: 20px 16px;
+    max-width: 800px;
     margin: 0 auto;
     width: 100%;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    margin-bottom: 24px;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-/* Картки з сучасними анімаціями */
+/* Картки */
 .nav-card {
-    background: var(--card-color);
-    border-radius: var(--border-radius);
-    padding: 32px 24px;
-    box-shadow: var(--shadow-md);
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
     transition: var(--transition);
     cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
-    border: 1px solid transparent;
     position: relative;
     overflow: hidden;
-    min-height: 180px;
 }
 
 .nav-card::before {
@@ -139,7 +116,7 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.05), transparent);
     transition: left 0.6s ease;
 }
 
@@ -148,47 +125,41 @@ body {
 }
 
 .nav-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
 }
 
 .nav-card:active {
-    transform: translateY(-2px) scale(0.98);
+    transform: translateY(0);
 }
 
 .card-icon {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
-    transition: var(--transition);
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-}
-
-.nav-card:hover .card-icon {
-    transform: scale(1.1) rotate(5deg);
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    display: block;
 }
 
 .nav-card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 12px;
-    color: var(--primary-color);
+    font-size: 1.125rem;
     font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--primary);
 }
 
 .nav-card p {
     color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.5;
+    font-size: 0.875rem;
 }
 
 /* Футер */
 .app-footer {
-    background: var(--card-color);
-    padding: 20px 16px;
+    background: var(--bg-card);
+    padding: 16px;
     text-align: center;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--border);
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     margin-top: auto;
 }
 
@@ -199,16 +170,15 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 20px;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-    padding: 20px;
+    transition: all 0.2s ease;
 }
 
 .modal-overlay.active {
@@ -217,180 +187,130 @@ body {
 }
 
 .modal {
-    background: var(--card-color);
-    border-radius: 24px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
     width: 100%;
     max-width: 500px;
-    max-height: 85vh;
+    max-height: 80vh;
     overflow: hidden;
-    transform: scale(0.8) translateY(50px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: var(--shadow-xl);
-    border: 1px solid rgba(255,255,255,0.1);
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+    box-shadow: var(--shadow-lg);
 }
 
 .modal-overlay.active .modal {
-    transform: scale(1) translateY(0);
+    transform: scale(1);
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px;
-    background: var(--gradient);
+    padding: 20px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
-    position: relative;
-}
-
-.modal-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 24px;
-    right: 24px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
 }
 
 .modal-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    margin: 0;
 }
 
 .close-button {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255,255,255,0.2);
     border: none;
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: 8px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: var(--transition);
-    backdrop-filter: blur(10px);
 }
 
 .close-button:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg);
+    background: rgba(255,255,255,0.3);
 }
 
 .modal-content {
-    padding: 24px;
+    padding: 20px;
     max-height: 60vh;
     overflow-y: auto;
 }
 
-/* Стилі для контенту модальних вікон */
+/* Компоненти контенту */
 .info-card {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-left: 4px solid var(--primary-color);
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-left: 4px solid var(--primary);
 }
 
 .info-card h3 {
-    color: var(--primary-color);
+    color: var(--primary);
     margin-bottom: 8px;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 /* Кнопки днів */
 .day-buttons {
     display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 8px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .day-button {
-    padding: 12px 20px;
-    border: 2px solid var(--primary-color);
-    background: white;
-    color: var(--primary-color);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-weight: 600;
     flex: 1;
     min-width: 120px;
+    padding: 10px 16px;
+    border: 2px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
     text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.day-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--gradient);
-    transition: left 0.3s ease;
-    z-index: 1;
-}
-
-.day-button span {
-    position: relative;
-    z-index: 2;
 }
 
 .day-button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.day-button:hover::before {
-    left: 0;
-}
-
-.day-button:hover span {
-    color: white;
+    border-color: var(--primary);
+    transform: translateY(-1px);
 }
 
 .day-button.active {
-    background: var(--gradient);
+    background: var(--primary);
     color: white;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
 }
 
-.day-button.active::before {
-    left: 0;
-}
-
-/* Таблиця розкладу */
+/* Таблиця */
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 16px;
-    background: white;
-    border-radius: 12px;
+    background: var(--bg-card);
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .schedule-table th {
-    background: var(--gradient);
-    color: white;
-    padding: 16px;
+    background: #f1f5f9;
+    padding: 12px;
     text-align: left;
     font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
 }
 
 .schedule-table td {
-    padding: 16px;
-    border-bottom: 1px solid var(--border-color);
-    transition: var(--transition);
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
 }
 
 .schedule-table tr:last-child td {
@@ -398,78 +318,97 @@ body {
 }
 
 .schedule-table tr:hover td {
-    background: #f8f9fa;
+    background: #f8fafc;
 }
 
 /* Списки */
 .book-list, .bells-list, .ministry-list {
-    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .book-item, .bell-item, .ministry-item {
-    background: white;
-    border-radius: 12px;
+    background: var(--bg-card);
+    border-radius: 8px;
     padding: 16px;
-    margin-bottom: 12px;
+    border: 1px solid var(--border);
     transition: var(--transition);
-    box-shadow: var(--shadow-sm);
-    border-left: 4px solid transparent;
 }
 
 .book-item:hover, .bell-item:hover, .ministry-item:hover {
-    transform: translateX(8px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+    transform: translateX(4px);
 }
 
-.book-item {
-    border-left-color: #4cd964;
+.book-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.book-link:hover {
+    color: var(--primary);
 }
 
 .bell-item {
-    border-left-color: #ff9500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.ministry-item {
-    border-left-color: #667eea;
+.bell-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ministry-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.ministry-students {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+}
+
+.ministry-description {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.4;
 }
 
 /* Адаптивність */
 @media (max-width: 768px) {
     .grid-container {
         grid-template-columns: 1fr;
-        gap: 16px;
     }
     
     .nav-card {
-        padding: 24px 20px;
-        min-height: 160px;
+        padding: 20px 16px;
     }
     
     .card-icon {
-        font-size: 3rem;
+        font-size: 2rem;
     }
     
     .header-content h1 {
-        font-size: 1.5rem;
-    }
-    
-    .user-info {
-        padding: 6px 12px;
-    }
-    
-    .user-avatar {
-        width: 36px;
-        height: 36px;
+        font-size: 1.125rem;
     }
     
     .day-buttons {
-        gap: 8px;
+        flex-direction: column;
     }
     
     .day-button {
-        min-width: 100px;
-        padding: 10px 16px;
-        font-size: 0.9rem;
+        min-width: auto;
     }
 }
 
@@ -478,44 +417,39 @@ body {
         padding: 16px 12px;
     }
     
-    .nav-card {
-        padding: 20px 16px;
-        min-height: 140px;
-    }
-    
-    .card-icon {
-        font-size: 2.5rem;
-        margin-bottom: 16px;
-    }
-    
-    .nav-card h3 {
-        font-size: 1.2rem;
-    }
-    
     .modal {
-        margin: 10px;
-        width: calc(100% - 20px);
+        margin: 0;
+        border-radius: 0;
+        max-height: 100vh;
+        height: 100vh;
     }
     
-    .modal-header, .modal-content {
-        padding: 20px;
+    .modal-overlay {
+        padding: 0;
     }
 }
 
-/* Спеціальні анімації */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Утиліти */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Анімації */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .nav-card {
-    animation: fadeInUp 0.6s ease forwards;
+    animation: fadeIn 0.3s ease forwards;
 }
 
 .nav-card:nth-child(1) { animation-delay: 0.1s; }
@@ -524,45 +458,16 @@ body {
 .nav-card:nth-child(4) { animation-delay: 0.4s; }
 .nav-card:nth-child(5) { animation-delay: 0.5s; }
 
-/* Плавне прокручування */
-.modal-content {
-    scroll-behavior: smooth;
-}
-
-/* Інтерактивні елементи */
-.book-link, .bell-info, .ministry-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    color: inherit;
-    transition: var(--transition);
-}
-
-.book-link:hover {
-    color: var(--primary-color);
-}
-
-/* Спеціальні стилі для іконок */
-.card-icon::before {
-    font-size: inherit;
-}
-
-/* Поліпшення читабельності */
+/* Поліпшення скроллу */
 .modal-content::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 
 .modal-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
+    background: #f1f5f9;
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 3px;
+    background: var(--primary);
+    border-radius: 2px;
 }
-
-.modal-content::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary-color);
-    }
