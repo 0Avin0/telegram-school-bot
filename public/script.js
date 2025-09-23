@@ -87,13 +87,8 @@ const utils = {
     closeModal: () => {
         elements.modalOverlay.classList.remove('active');
         document.body.style.overflow = 'auto';
-    },
-    
-    createElement: (tag, classes, content) => {
-        const el = document.createElement(tag);
-        if (classes) el.className = classes;
-        if (content) el.innerHTML = content;
-        return el;
+        // Очищаємо контент при закритті
+        elements.modalContent.innerHTML = '';
     }
 };
 
@@ -134,9 +129,9 @@ const features = {
         const booksList = Object.entries(APP_DATA.ebooks).map(([subject, url]) => `
             <div class="book-item">
                 <a href="${url}" target="_blank" class="book-link">
-                    <span class="card-icon">📚</span>
-                    <span>${subject}</span>
-                    <span style="margin-left: auto;">↗</span>
+                    <span>📚</span>
+                    <span style="flex: 1;">${subject}</span>
+                    <span>↗</span>
                 </a>
             </div>
         `).join('');
@@ -185,9 +180,9 @@ const features = {
             <div class="ministry-item">
                 <div class="ministry-header">
                     <span>${position.split(' ')[0]}</span>
-                    <div>
-                        <h4>${position}</h4>
-                        <p class="ministry-students">${students.join(', ')}</p>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 4px 0;">${position}</h4>
+                        <p class="ministry-students" style="margin: 0;">${students.join(', ')}</p>
                     </div>
                 </div>
             </div>
@@ -215,6 +210,11 @@ const features = {
             <div class="info-card">
                 <h3>📞 Екстрені служби</h3>
                 <p>101 - Пожежна<br>102 - Поліція<br>103 - Швидка<br>104 - Газова</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>📚 Доступні функції</h3>
+                <p>• Розклад занять<br>• Онлайн підручники<br>• Розклад дзвінків<br>• Міністри класу</p>
             </div>
         `;
         
