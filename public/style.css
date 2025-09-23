@@ -1,20 +1,213 @@
-/* Додайте ці стилі в кінець файлу style.css */
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --accent-color: #f093fb;
+    --success-color: #4cd964;
+    --warning-color: #ff9500;
+    --danger-color: #ff3b30;
+    --background-color: #f8f9fa;
+    --card-color: #ffffff;
+    --text-primary: #2d3748;
+    --text-secondary: #718096;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
 
-/* Стилі для модального вікна */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--background-color);
+}
+
+/* Хедер з градієнтом */
+.app-header {
+    background: var(--gradient);
+    color: white;
+    padding: 20px 16px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.app-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.header-content h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Основний контент */
+.app-main {
+    flex: 1;
+    padding: 24px 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* Картки з сучасними анімаціями */
+.nav-card {
+    background: var(--card-color);
+    border-radius: var(--border-radius);
+    padding: 32px 24px;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+    min-height: 180px;
+}
+
+.nav-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+.nav-card:hover::before {
+    left: 100%;
+}
+
+.nav-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-color);
+}
+
+.nav-card:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+.card-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    transition: var(--transition);
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+.nav-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.nav-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.nav-card p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Футер */
+.app-footer {
+    background: var(--card-color);
+    padding: 20px 16px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: auto;
+}
+
+/* Модальне вікно */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
     padding: 20px;
 }
 
@@ -24,271 +217,352 @@
 }
 
 .modal {
-    background: white;
-    border-radius: 15px;
+    background: var(--card-color);
+    border-radius: 24px;
     width: 100%;
     max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    transform: translateY(50px);
-    transition: transform 0.3s ease;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    max-height: 85vh;
+    overflow: hidden;
+    transform: scale(0.8) translateY(50px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .modal-overlay.active .modal {
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-    background: linear-gradient(135deg, #4a6fa5, #6e9cd2);
+    padding: 24px;
+    background: var(--gradient);
     color: white;
-    border-radius: 15px 15px 0 0;
+    position: relative;
+}
+
+.modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 24px;
+    right: 24px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
 }
 
 .modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
     margin: 0;
-    font-size: 1.3rem;
 }
 
 .close-button {
-    background: none;
+    background: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
-    font-size: 24px;
+    font-size: 1.5rem;
     cursor: pointer;
-    padding: 5px;
+    padding: 8px;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.3s ease;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
 }
 
 .close-button:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
 }
 
 .modal-content {
-    padding: 20px;
+    padding: 24px;
     max-height: 60vh;
     overflow-y: auto;
 }
 
-/* Стилі для кнопок днів */
+/* Стилі для контенту модальних вікон */
+.info-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.info-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+}
+
+/* Кнопки днів */
 .day-buttons {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .day-button {
-    padding: 10px 15px;
-    border: 2px solid #4a6fa5;
+    padding: 12px 20px;
+    border: 2px solid var(--primary-color);
     background: white;
-    color: #4a6fa5;
-    border-radius: 8px;
+    color: var(--primary-color);
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
+    transition: var(--transition);
+    font-weight: 600;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.day-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient);
+    transition: left 0.3s ease;
+    z-index: 1;
+}
+
+.day-button span {
+    position: relative;
+    z-index: 2;
 }
 
 .day-button:hover {
-    background: #f0f4f8;
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.day-button:hover::before {
+    left: 0;
+}
+
+.day-button:hover span {
+    color: white;
 }
 
 .day-button.active {
-    background: #4a6fa5;
+    background: var(--gradient);
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(74, 111, 165, 0.3);
+    box-shadow: var(--shadow-lg);
 }
 
-/* Стилі для таблиці розкладу */
+.day-button.active::before {
+    left: 0;
+}
+
+/* Таблиця розкладу */
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 15px;
+    margin-top: 16px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
 }
 
 .schedule-table th {
-    background: #f8f9fa;
-    padding: 12px;
+    background: var(--gradient);
+    color: white;
+    padding: 16px;
     text-align: left;
-    border-bottom: 2px solid #4a6fa5;
-    color: #4a6fa5;
+    font-weight: 600;
 }
 
 .schedule-table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition);
 }
 
-.schedule-table tr:hover {
+.schedule-table tr:last-child td {
+    border-bottom: none;
+}
+
+.schedule-table tr:hover td {
     background: #f8f9fa;
 }
 
-/* Стилі для списку книг */
-.book-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* Списки */
+.book-list, .bells-list, .ministry-list {
+    margin-top: 16px;
+}
+
+.book-item, .bell-item, .ministry-item {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid transparent;
+}
+
+.book-item:hover, .bell-item:hover, .ministry-item:hover {
+    transform: translateX(8px);
+    box-shadow: var(--shadow-md);
 }
 
 .book-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #eee;
-    transition: background 0.3s ease;
+    border-left-color: #4cd964;
 }
 
-.book-item:hover {
-    background: #f8f9fa;
-    border-radius: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.book-icon {
-    font-size: 20px;
-    margin-right: 12px;
-    width: 24px;
-    text-align: center;
-}
-
-.book-link {
-    color: #4a6fa5;
-    text-decoration: none;
-    font-weight: 500;
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.book-link:hover {
-    color: #6e9cd2;
-}
-
-.external-icon {
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-/* Стилі для дзвінків */
 .bell-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #eee;
+    border-left-color: #ff9500;
 }
 
-.bell-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.bell-icon {
-    font-size: 18px;
-    width: 24px;
-    text-align: center;
-}
-
-.bell-time {
-    font-weight: 600;
-    color: #4a6fa5;
-}
-
-/* Стилі для міністрів */
 .ministry-item {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-left: 4px solid #4a6fa5;
-}
-
-.ministry-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-}
-
-.ministry-icon {
-    font-size: 24px;
-}
-
-.ministry-info h4 {
-    margin: 0;
-    color: #4a6fa5;
-    font-size: 1.1rem;
-}
-
-.ministry-students {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.ministry-description {
-    margin: 0;
-    color: #555;
-    font-size: 0.9rem;
-    line-height: 1.4;
-}
-
-/* Анімації */
-.nav-card {
-    transition: all 0.3s ease;
-}
-
-.nav-card:active {
-    transform: scale(0.95);
+    border-left-color: #667eea;
 }
 
 /* Адаптивність */
 @media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .nav-card {
+        padding: 24px 20px;
+        min-height: 160px;
+    }
+    
+    .card-icon {
+        font-size: 3rem;
+    }
+    
+    .header-content h1 {
+        font-size: 1.5rem;
+    }
+    
+    .user-info {
+        padding: 6px 12px;
+    }
+    
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+    }
+    
     .day-buttons {
-        justify-content: center;
+        gap: 8px;
     }
     
     .day-button {
-        flex: 1;
-        min-width: 120px;
-        text-align: center;
+        min-width: 100px;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-main {
+        padding: 16px 12px;
+    }
+    
+    .nav-card {
+        padding: 20px 16px;
+        min-height: 140px;
+    }
+    
+    .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 16px;
+    }
+    
+    .nav-card h3 {
+        font-size: 1.2rem;
     }
     
     .modal {
         margin: 10px;
         width: calc(100% - 20px);
     }
+    
+    .modal-header, .modal-content {
+        padding: 20px;
+    }
 }
 
-@media (max-width: 480px) {
-    .modal-header {
-        padding: 15px;
+/* Спеціальні анімації */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
-    
-    .modal-content {
-        padding: 15px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    
-    .day-button {
-        min-width: 100px;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-    }
+}
+
+.nav-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.nav-card:nth-child(1) { animation-delay: 0.1s; }
+.nav-card:nth-child(2) { animation-delay: 0.2s; }
+.nav-card:nth-child(3) { animation-delay: 0.3s; }
+.nav-card:nth-child(4) { animation-delay: 0.4s; }
+.nav-card:nth-child(5) { animation-delay: 0.5s; }
+
+/* Плавне прокручування */
+.modal-content {
+    scroll-behavior: smooth;
+}
+
+/* Інтерактивні елементи */
+.book-link, .bell-info, .ministry-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+.book-link:hover {
+    color: var(--primary-color);
+}
+
+/* Спеціальні стилі для іконок */
+.card-icon::before {
+    font-size: inherit;
+}
+
+/* Поліпшення читабельності */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
     }
