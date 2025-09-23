@@ -12,6 +12,83 @@ const elements = {
     closeButton: document.querySelector('.close-button')
 };
 
+// Список дозволених користувачів (ID) - ТАКИЙ ЖЕ ЯК У БОТІ
+const ALLOWED_USERS = [
+    8147168546, // Назар Кузьмич
+    6329096147, // Аліна Ткач
+    5836950765, // Діма Яриш
+    7745185733, // Марго Коваленко
+    1924433301,  // Саша Ткач
+    5861145158, // Настя Коваль
+];
+
+// Перевірка доступу
+function checkAccess(userId) {
+    console.log('Перевірка доступу для ID:', userId);
+    console.log('Дозволені ID:', ALLOWED_USERS);
+    return ALLOWED_USERS.includes(userId);
+}
+
+// Блокування доступу
+function blockAccess() {
+    elements.appContainer.innerHTML = `
+        <div class="access-denied">
+            <div class="denied-content">
+                <div class="denied-icon">⛔</div>
+                <h2>Доступ заборонено</h2>
+                <p>Ви не маєте дозволу на використання цього додатку.</p>
+                <p>Зверніться до адміністратора для отримання доступу.</p>
+                <p style="margin-top: 20px; font-size: 12px; color: #999;">Ваш ID: ${tg.initDataUnsafe?.user?.id || 'невідомо'}</p>
+            </div>
+        </div>
+    `;
+}
+
+// Стилі для блокування доступу
+const blockStyles = `
+    .access-denied {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+    }
+    
+    .denied-content {
+        text-align: center;
+        background: white;
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 100%;
+    }
+    
+    .denied-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        color: #ff6b6b;
+    }
+    
+    .denied-content h2 {
+        color: #dc3545;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+    }
+    
+    .denied-content p {
+        color: #6c757d;
+        margin-bottom: 10px;
+        line-height: 1.5;
+    }
+`;
+
+// Додаємо стилі для блокування
+const styleSheet = document.createElement('style');
+styleSheet.textContent = blockStyles;
+document.head.appendChild(styleSheet);
+
 // Дані додатка
 const APP_DATA = {
     rozklad: {
@@ -244,18 +321,30 @@ function renderSchedule(day) {
     `;
 }
 
-// Ініціалізація
+// Ініціалізація додатка
 function initApp() {
-    // Ініціалізація Telegram WebApp
+    console.log('🚀 Ініціалізація додатка...');
+    
+    // Отримуємо дані користувача
+    const user = tg.initDataUnsafe?.user;
+    console.log('👤 Дані користувача:', user);
+    
+    // Перевіряємо доступ
+    if (!user || !checkAccess(user.id)) {
+        console.log('🚫 Доступ заборонено для ID:', user?.id);
+        blockAccess();
+        return;
+    }
+    
+    console.log('✅ Доступ дозволено для ID:', user.id);
+    
+    // Якщо доступ дозволено - продовжуємо
     tg.expand();
     tg.enableClosingConfirmation();
     
     // Оновлення інформації користувача
-    const user = tg.initDataUnsafe?.user;
-    if (user) {
-        elements.userName.textContent = user.first_name || 'Учень';
-        if (user.photo_url) elements.userPhoto.src = user.photo_url;
-    }
+    elements.userName.textContent = user.first_name || 'Учень';
+    if (user.photo_url) elements.userPhoto.src = user.photo_url;
     
     // Обробники кнопок
     document.querySelectorAll('.nav-card').forEach(card => {
@@ -280,6 +369,8 @@ function initApp() {
             window.open(e.target.href, '_blank');
         }
     });
+    
+    console.log('✅ Додаток успішно ініціалізовано');
 }
 
 // Запуск додатка
