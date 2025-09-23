@@ -18,8 +18,7 @@ const ALLOWED_USERS = [
     6329096147, // Аліна Ткач
     5836950765, // Діма Яриш
     7745185733, // Марго Коваленко
-    1924433301,  // Саша Ткач
-    5861145158, // Настя Коваль
+    1924433301 // Саша Ткач
 ];
 
 // Перевірка доступу
@@ -89,7 +88,7 @@ const styleSheet = document.createElement('style');
 styleSheet.textContent = blockStyles;
 document.head.appendChild(styleSheet);
 
-// Дані додатка
+// Дані для додатка
 const APP_DATA = {
     rozklad: {
         "Понеділок": ["Історія України", "Підприємство і Фінансова грамотність", "Українська мова", "Алгебра", "Мистецтво", "Українська література", "Фізика"],
@@ -151,6 +150,17 @@ const APP_DATA = {
         "📸 Міністерство медіа та комунікацій": ["Марія Мовчан"],
         "💡 Міністерство креативних ідей": ["Ліна Ільченко"],
         "❤️ Міністерство добрих справ і дружби": ["Маргарита Гриценко"]
+    },
+    
+    casino: {
+        "admin_card": "4441 1144 3778 7581",
+        "exchange_rate": 10,
+        "withdraw_rate": 12,
+        "min_bet": 10,
+        "max_bet": 5000,
+        "win_multiplier": 2,
+        "min_deposit": 50,
+        "min_withdraw": 100
     }
 };
 
@@ -164,7 +174,6 @@ const utils = {
     closeModal: () => {
         elements.modalOverlay.classList.remove('active');
         document.body.style.overflow = 'auto';
-        // Очищаємо контент при закритті
         elements.modalContent.innerHTML = '';
     }
 };
@@ -186,22 +195,25 @@ const features = {
         
         utils.showModal();
         
-        // Обробники кнопок днів
         setTimeout(() => {
-            document.querySelectorAll('.day-button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.day-button').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    document.getElementById('schedule-display').innerHTML = 
-                        renderSchedule(e.target.dataset.day);
+            const dayButtons = document.querySelectorAll('.day-button');
+            dayButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.day-button').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    const day = this.getAttribute('data-day');
+                    const scheduleDisplay = document.getElementById('schedule-display');
+                    scheduleDisplay.innerHTML = renderSchedule(day);
                 });
             });
-            document.querySelector('.day-button').classList.add('active');
+            if (dayButtons.length > 0) {
+                dayButtons[0].classList.add('active');
+            }
         }, 50);
     },
     
     books: () => {
-        elements.modalTitle.textContent = '📚 Підручники';
+        elements.modalTitle.textContent = '📚 Онлайн підручники';
         
         const booksList = Object.entries(APP_DATA.ebooks).map(([subject, url]) => `
             <div class="book-item">
@@ -215,8 +227,8 @@ const features = {
         
         elements.modalContent.innerHTML = `
             <div class="info-card">
-                <h3>Електронні підручники 8 класу</h3>
-                <p>Натисніть на предмет для перегляду</p>
+                <h3>Підручники 8 класу</h3>
+                <p>Доступні електронні версії підручників:</p>
             </div>
             <div class="book-list">${booksList}</div>
         `;
@@ -233,17 +245,18 @@ const features = {
                     <span>${lesson.includes('перерва') ? '🔄' : '📚'}</span>
                     <span>${lesson}</span>
                 </div>
-                <span>${time}</span>
+                <span class="bell-time">${time}</span>
             </div>
         `).join('');
         
         elements.modalContent.innerHTML = `
             <div class="info-card">
                 <h3>Розклад уроків та перерв</h3>
+                <p>Час проведення занять:</p>
             </div>
             <div class="bells-list">${bellsList}</div>
             <div class="info-card">
-                <p><strong>⏰ Тривалість навчального дня:</strong> 6:50 год</p>
+                <p><strong>⏰ Загальна тривалість навчального дня:</strong> 6:50 год</p>
             </div>
         `;
         
@@ -275,23 +288,81 @@ const features = {
         utils.showModal();
     },
     
+    casino: () => {
+        elements.modalTitle.textContent = '🎰 Казино Study Bot';
+        
+        elements.modalContent.innerHTML = `
+            <div class="info-card">
+                <h3>🎰 Ігрова система Study Bot</h3>
+                <p>Казино доступне тільки в Telegram боті</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>📱 Як грати?</h3>
+                <p>1. Перейдіть в Telegram бота</p>
+                <p>2. Натисніть кнопку "🎰 Казино"</p>
+                <p>3. Поповніть баланс або грайте на бонуси</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>💳 Поповнення балансу</h3>
+                <p>• Мінімальний депозит: ${APP_DATA.casino.min_deposit} грн</p>
+                <p>• Курс: 1 грн = ${APP_DATA.casino.exchange_rate} балів</p>
+                <p>• Виведення: ${APP_DATA.casino.withdraw_rate} балів = 1 грн</p>
+                <p>• Картка для оплати: ${APP_DATA.casino.admin_card}</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>🎯 Правила гри</h3>
+                <p>• Ставка від ${APP_DATA.casino.min_bet} до ${APP_DATA.casino.max_bet} балів</p>
+                <p>• Шанс виграшу: 50/50</p>
+                <p>• Множник виграшу: x${APP_DATA.casino.win_multiplier}</p>
+                <p>• При виграші отримуєте подвійну ставку</p>
+            </div>
+            
+            <div class="info-card" style="text-align: center;">
+                <h3>📲 Перейти в бота</h3>
+                <p>Натисніть кнопку нижче, щоб відкрити казино</p>
+                <a href="https://t.me/your_study_bot" target="_blank" 
+                   style="display: inline-block; background: #6366f1; color: white; 
+                          padding: 12px 24px; border-radius: 8px; text-decoration: none; 
+                          margin-top: 10px; font-weight: 500;">
+                   🎰 Відкрити казино в боті
+                </a>
+            </div>
+        `;
+        
+        utils.showModal();
+    },
+    
     info: () => {
         elements.modalTitle.textContent = '📋 Інформація';
         
         elements.modalContent.innerHTML = `
             <div class="info-card">
-                <h3>Study Bot</h3>
-                <p>Навчальний помічник для 8 класу</p>
+                <h3>ℹ️ Про Study Bot</h3>
+                <p>Навчальний помічник для учнів 8 класу</p>
             </div>
             
             <div class="info-card">
                 <h3>📞 Екстрені служби</h3>
-                <p>101 - Пожежна<br>102 - Поліція<br>103 - Швидка<br>104 - Газова</p>
+                <ul>
+                    <li>🚒 101 - Пожежна служба</li>
+                    <li>🚓 102 - Поліція</li>
+                    <li>🚑 103 - Швидка допомога</li>
+                    <li>⚠️ 104 - Газова служба</li>
+                </ul>
             </div>
             
             <div class="info-card">
                 <h3>📚 Доступні функції</h3>
-                <p>• Розклад занять<br>• Онлайн підручники<br>• Розклад дзвінків<br>• Міністри класу</p>
+                <ul>
+                    <li>📅 Розклад занять 8 класу</li>
+                    <li>📖 Онлайн підручники 8 класу</li>
+                    <li>🔔 Розклад дзвінків та перерв</li>
+                    <li>👥 Міністри класу 8 класу</li>
+                    <li>🎰 Казино з реальним виводом</li>
+                </ul>
             </div>
         `;
         
@@ -348,22 +419,35 @@ function initApp() {
     
     // Обробники кнопок
     document.querySelectorAll('.nav-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const feature = card.dataset.feature;
+        card.addEventListener('click', function() {
+            const feature = this.getAttribute('data-feature');
+            console.log('🖱️ Клік по картці:', feature);
             if (features[feature]) {
                 features[feature]();
             }
+        });
+        
+        // Ефекти натискання
+        card.style.cursor = 'pointer';
+        card.addEventListener('mousedown', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        card.addEventListener('mouseup', function() {
+            this.style.transform = 'scale(1)';
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
         });
     });
     
     // Обробники модального вікна
     elements.closeButton.addEventListener('click', utils.closeModal);
-    elements.modalOverlay.addEventListener('click', (e) => {
+    elements.modalOverlay.addEventListener('click', function(e) {
         if (e.target === elements.modalOverlay) utils.closeModal();
     });
     
     // Обробка посилань
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', function(e) {
         if (e.target.tagName === 'A' && e.target.href) {
             e.preventDefault();
             window.open(e.target.href, '_blank');
@@ -372,63 +456,11 @@ function initApp() {
     
     console.log('✅ Додаток успішно ініціалізовано');
 }
-// Додаємо в features обробник для казино
-const features = {
-    // ... інші функції залишаються
-    
-    casino: () => {
-        elements.modalTitle.textContent = '🎰 Казино Study Bot';
-        
-        elements.modalContent.innerHTML = `
-            <div class="info-card">
-                <h3>🎰 Ігрова система Study Bot</h3>
-                <p>Казино доступне тільки в Telegram боті</p>
-            </div>
-            
-            <div class="info-card">
-                <h3>📱 Як грати?</h3>
-                <p>1. Перейдіть в Telegram бота</p>
-                <p>2. Натисніть кнопку "🎰 Казино"</p>
-                <p>3. Поповніть баланс або грайте на бонуси</p>
-            </div>
-            
-            <div class="info-card">
-                <h3>💳 Поповнення балансу</h3>
-                <p>• Мінімальний депозит: 50 грн</p>
-                <p>• Курс: 1 грн = 10 балів</p>
-                <p>• Виведення: 1200 балів = 100 грн</p>
-            </div>
-            
-            <div class="info-card">
-                <h3>🎯 Правила гри</h3>
-                <p>• Ставка від 10 до 5000 балів</p>
-                <p>• Шанс виграшу: 50/50</p>
-                <p>• Множник виграшу: x2</p>
-                <p>• При виграші отримуєте подвійну ставку</p>
-            </div>
-            
-            <div class="info-card" style="text-align: center;">
-                <h3>📲 Перейти в бота</h3>
-                <p>Натисніть кнопку нижче, щоб відкрити казино</p>
-                <a href="https://t.me/your_bot_username" target="_blank" 
-                   style="display: inline-block; background: #6366f1; color: white; 
-                          padding: 12px 24px; border-radius: 8px; text-decoration: none; 
-                          margin-top: 10px;">
-                   🎰 Відкрити казино
-                </a>
-            </div>
-        `;
-        
-        utils.showModal();
-    }
-};
 
-// Додаємо в index.html кнопку казино
-// В grid-container додаємо:
-<div class="nav-card" data-feature="casino">
-    <div class="card-icon">🎰</div>
-    <h3>Казино</h3>
-    <p>Ігрова система з виводом</p>
-</div>
 // Запуск додатка
 document.addEventListener('DOMContentLoaded', initApp);
+
+// Обробка помилок
+window.addEventListener('error', function(e) {
+    console.error('❌ Помилка:', e.error);
+});
